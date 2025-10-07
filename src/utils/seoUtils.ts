@@ -1,4 +1,14 @@
-// src/utils/seoUtils.ts - Bu dosyada sadece generateMetaTags fonksiyonunu güncelleyin
+export function toISO8601Date(timestamp: number): string {
+  if (!timestamp || isNaN(timestamp) || timestamp <= 0) {
+    return new Date().toISOString();
+  }
+  return new Date(timestamp).toISOString();
+}
+
+export function calculateValidThrough(createdAt: number, daysValid: number = 90): string {
+  const validUntil = createdAt + (daysValid * 24 * 60 * 60 * 1000);
+  return toISO8601Date(validUntil);
+}
 
 export function generateSlug(text: string): string {
   return text
@@ -19,6 +29,99 @@ export function generateSlug(text: string): string {
 export function generateJobUrl(job: any): string {
   const slug = generateSlug(job.title);
   return `/ilan/${slug}`;
+}
+
+export function generateJobPostingJsonLd(job: any) {
+  const cleanDescription = (job.description || "İş tanımı")
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const fullDescription = cleanDescription.length < 200
+    ? cleanDescription + " Detaylı bilgi için ilan sayfasını ziyaret edin. Bu pozisyon için hemen başvurun ve kariyerinize yeni bir yön verin."
+    : cleanDescription;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "title": job.title || "İş İlanı",
+    "description": fullDescription.substring(0, 2000),
+    "datePosted": toISO8601Date(job.createdAt),
+    "validThrough": calculateValidThrough(job.createdAt, 90),
+    "employmentType": getEmploymentType(job.type),
+    "hiringOrganization": {
+      "@type": "Organization",
+      "name": job.company || "İşveren",
+      "sameAs": "https://isilanlarim.org",
+      "logo": "https://isilanlarim.org/logo.png"
+    },
+    "jobLocation": {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": job.location || "Türkiye",
+        "addressRegion": job.location || "Türkiye",
+        "addressCountry": "TR"
+      }
+    },
+    "identifier": {
+      "@type": "PropertyValue",
+      "name": "job-id",
+      "value": job.id
+    },
+    "url": `https://isilanlarim.org/ilan/${generateSlug(job.title)}`
+  };
+
+  if (job.experienceLevel) {
+    jsonLd["experienceRequirements"] = {
+      "@type": "OccupationalExperienceRequirements",
+      "monthsOfExperience": getExperienceMonths(job.experienceLevel)
+    };
+  }
+
+  if (job.educationLevel) {
+    jsonLd["educationRequirements"] = {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": getEducationRequirements(job.educationLevel)
+    };
+  }
+
+  if (job.salary && job.salary !== "0" && job.salary !== "0₺") {
+    const salaryValue = extractSalaryAmount(job.salary);
+    if (salaryValue > 0) {
+      jsonLd["baseSalary"] = {
+        "@type": "MonetaryAmount",
+        "currency": "TRY",
+        "value": {
+          "@type": "QuantitativeValue",
+          "value": salaryValue,
+          "unitText": "MONTH"
+        }
+      };
+    }
+  }
+
+  if (job.type === 'Uzaktan' || job.type === 'Remote') {
+    jsonLd["jobLocationType"] = "TELECOMMUTE";
+  }
+
+  if (job.contactEmail || job.contactPhone) {
+    jsonLd["applicationContact"] = {
+      "@type": "ContactPoint",
+      "email": job.contactEmail || "info@isilanlarim.org",
+      "telephone": job.contactPhone || "+905459772134"
+    };
+  }
+
+  if (job.category) {
+    jsonLd["industry"] = job.category;
+  }
+
+  if (job.subCategory) {
+    jsonLd["occupationalCategory"] = job.subCategory;
+  }
+
+  return jsonLd;
 }
 
 // ✅ GÜNCELLENMIŞ generateMetaTags - Google Search Console sorunlarını çözer
@@ -63,91 +166,13 @@ export function generateMetaTags(options: {
   }
   canonical.setAttribute('href', `https://isilanlarim.org${url}`);
 
-  // ✅ JobPosting Structured Data - GOOGLE SEARCH CONSOLE SORUNLARINI ÇÖZER
   if (jobData) {
     const existingScript = document.querySelector('script[type="application/ld+json"][data-job="true"]');
     if (existingScript) {
       existingScript.remove();
     }
 
-    // Açıklamayı temizle ve minimum 200 karakter garantisi
-    const cleanDescription = (jobData.description || "İş tanımı")
-      .replace(/<[^>]*>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-    const fullDescription = cleanDescription.length < 200
-      ? cleanDescription + " Detaylı bilgi için ilan sayfasını ziyaret edin. Bu pozisyon için hemen başvurun ve kariyerinize yeni bir yön verin."
-      : cleanDescription;
-
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "JobPosting",
-
-      // ✅ ZORUNLU ALANLAR - Google'ın istediği
-      "title": jobData.title || "İş İlanı",
-      "description": fullDescription.substring(0, 2000),
-      "datePosted": new Date(jobData.createdAt).toISOString(), // ✅ ISO 8601 formatı
-
-      // ✅ hiringOrganization - ZORUNLU (daha detaylı)
-      "hiringOrganization": {
-        "@type": "Organization",
-        "name": jobData.company || "İşveren",
-        "sameAs": "https://isilanlarim.org",
-        "logo": "https://isilanlarim.org/logo.png"
-      },
-
-      // ✅ jobLocation - ZORUNLU
-      "jobLocation": {
-        "@type": "Place",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": jobData.location || "Türkiye",
-          "addressRegion": jobData.location || "Türkiye",
-          "addressCountry": "TR"
-        }
-      },
-      
-      // ✅ İSTEĞE BAĞLI AMA ÖNEMLİ ALANLAR
-      "employmentType": getEmploymentType(jobData.type), // ✅ EmploymentType enum
-      "experienceRequirements": getExperienceRequirements(jobData.experienceLevel), // ✅ Geçerli enum
-      "educationRequirements": getEducationRequirements(jobData.educationLevel), // ✅ Geçerli enum
-      
-      // ✅ validThrough - 60 gün sonra
-      "validThrough": new Date(jobData.createdAt + (60 * 24 * 60 * 60 * 1000)).toISOString(),
-      
-      // ✅ baseSalary - Doğru format
-      ...(jobData.salary && {
-        "baseSalary": {
-          "@type": "MonetaryAmount",
-          "currency": "TRY",
-          "value": {
-            "@type": "QuantitativeValue",
-            "value": extractSalaryAmount(jobData.salary),
-            "unitText": "MONTH"
-          }
-        }
-      }),
-      
-      // Diğer alanlar
-      "jobLocationType": jobData.type === 'Uzaktan' ? 'TELECOMMUTE' : undefined,
-      "url": `https://isilanlarim.org/ilan/${generateSlug(jobData.title)}`,
-      "applicationContact": {
-        "@type": "ContactPoint",
-        "email": jobData.contactEmail || "info@isilanlarim.org",
-        "telephone": jobData.contactPhone || "+905459772134"
-      },
-      
-      // Kategori
-      "industry": jobData.category || "Diğer",
-      "occupationalCategory": jobData.subCategory || "Genel",
-      
-      // Organizasyon detayları
-      "identifier": {
-        "@type": "PropertyValue",
-        "name": "job-id",
-        "value": jobData.id
-      }
-    };
+    const structuredData = generateJobPostingJsonLd(jobData);
 
     const script = document.createElement('script');
     script.type = 'application/ld+json';
@@ -178,10 +203,10 @@ function getEmploymentType(type: string): string {
 
 function getExperienceRequirements(level?: string): string {
   if (!level) return 'unspecified';
-  
+
   const experienceMap: Record<string, string> = {
     'Yeni Mezun': 'entry-level',
-    'Deneyimsiz': 'entry-level', 
+    'Deneyimsiz': 'entry-level',
     '0-1 Yıl': 'entry-level',
     '1-2 Yıl': 'associate',
     '2-5 Yıl': 'mid-level',
@@ -189,8 +214,25 @@ function getExperienceRequirements(level?: string): string {
     'Uzman': 'executive',
     'Yönetici': 'executive'
   };
-  
+
   return experienceMap[level] || 'unspecified';
+}
+
+function getExperienceMonths(level?: string): number {
+  if (!level) return 0;
+
+  const monthsMap: Record<string, number> = {
+    'Yeni Mezun': 0,
+    'Deneyimsiz': 0,
+    '0-1 Yıl': 6,
+    '1-2 Yıl': 18,
+    '2-5 Yıl': 36,
+    '5+ Yıl': 60,
+    'Uzman': 84,
+    'Yönetici': 120
+  };
+
+  return monthsMap[level] || 0;
 }
 
 function getEducationRequirements(level?: string): string {
