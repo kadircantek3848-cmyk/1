@@ -24,6 +24,7 @@ import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { CityJobsPage } from './pages/CityJobsPage';
 import { BlogPage } from './pages/BlogPage';
 import { BlogPostPage } from './pages/BlogPostPage';
+import { BlogCreatePage } from './pages/BlogCreatePage';
 import { LiveSupportWidget } from './components/support/LiveSupportWidget';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { useDailyBlogScheduler } from './hooks/useDailyBlogScheduler';
@@ -50,6 +51,7 @@ export function App() {
                 
                 {/* Blog routes */}
                 <Route path="/blog" element={<BlogPage />} />
+                <Route path="/blog/yeni" element={<BlogCreatePage />} />
                 <Route path="/blog/:slug" element={<BlogPostPage />} />
                 <Route path="/kariyer-rehberi" element={<BlogPage />} />
                 <Route path="/is-arama-rehberi" element={<BlogPage />} />
