@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ref, get, update } from 'firebase/database';
 import { db } from '../../lib/firebase';
-import { Calendar, Clock, User, Heart, Share2, MessageCircle, Sparkles, ArrowLeft } from 'lucide-react';
+import { Calendar, Clock, User, Heart, Share2, MessageCircle, Sparkles, ArrowLeft, Tag } from 'lucide-react';  // ✅ Tag eklendi
 import { BlogPost, BlogComment, blogService } from '../../services/blogService';
 import { formatDate, getTimeAgo } from '../../utils/dateUtils';
 import { useAuthContext } from '../../contexts/AuthContext';
