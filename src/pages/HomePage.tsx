@@ -49,24 +49,60 @@ export function HomePage() {
   } = useJobFilters(jobs);
 
   useEffect(() => {
-    // SEO meta tags
-    generateMetaTags({
-      title: 'İş İlanları 2025 - İşBuldum Hızlı İş Bulma Platformu',
-      description: 'İşBuldum ile hızlı iş bulun! 6 Ocak 2025 itibarıyla 50.000+ aktif iş ilanı. İstanbul, Ankara, İzmir ve tüm şehirlerde güncel iş fırsatları. Hemen başvurun, kariyerinizi şekillendirin!',
-      keywords: [
-        'iş ilanları', 'güncel iş ilanları', 'iş fırsatları', 'eleman ilanları', 'kariyer', 'iş ilanları 2025',
-        'istanbul iş ilanları', 'ankara iş ilanları', 'izmir iş ilanları',
-        'mühendis iş ilanları', 'garson iş ilanları', 'kurye iş ilanları', 
-        'resepsiyon görevlisi iş ilanları', 'aşçı yardımcısı iş ilanları', 'özel güvenlik iş ilanları',
-        'yeni iş ilanları', 'part time iş ilanları', 'tam zamanlı iş ilanları',
-        'uzaktan çalışma iş ilanları', 'remote iş ilanları', 'freelance iş ilanları', 'home office iş ilanları',
-        'yeni mezun iş ilanları', 'deneyimsiz iş ilanları',
-        'iş ara', 'iş bul', 'kariyer fırsatları', 'iş başvurusu', 'cv oluştur', 'ücretsiz cv',
-        'özgeçmiş hazırlama', 'iş arama sitesi', 'eleman.net', 'kariyer.net', 'secretcv',
-        'yenibiris', 'sahibinden iş ilanları', 'işkur iş ilanları', 'online iş başvurusu'
-      ],
-      url: window.location.pathname
-    });
+  // SEO meta tags
+generateMetaTags({
+  title: 'İş İlanları 2025 - İşBuldum Hızlı İş Bulma Platformu',
+  description: 'İşBuldum ile hızlı iş bulun! 6 Ocak 2025 itibarıyla 50.000+ aktif iş ilanı. İstanbul, Ankara, İzmir ve tüm şehirlerde güncel iş fırsatları. Hemen başvurun, kariyerinizi şekillendirin!',
+  keywords: [
+    'iş ilanları', 'güncel iş ilanları', 'iş fırsatları', 'eleman ilanları', 'kariyer', 'iş ilanları 2025',
+    'istanbul iş ilanları', 'ankara iş ilanları', 'izmir iş ilanları',
+    'mühendis iş ilanları', 'garson iş ilanları', 'kurye iş ilanları', 
+    'resepsiyon görevlisi iş ilanları', 'aşçı yardımcısı iş ilanları', 'özel güvenlik iş ilanları',
+    'yeni iş ilanları', 'part time iş ilanları', 'tam zamanlı iş ilanları',
+    'uzaktan çalışma iş ilanları', 'remote iş ilanları', 'freelance iş ilanları', 'home office iş ilanları',
+    'yeni mezun iş ilanları', 'deneyimsiz iş ilanları',
+    'iş ara', 'iş bul', 'kariyer fırsatları', 'iş başvurusu', 'cv oluştur', 'ücretsiz cv',
+    'özgeçmiş hazırlama', 'iş arama sitesi', 'eleman.net', 'kariyer.net', 'secretcv',
+    'yenibiris', 'sahibinden iş ilanları', 'işkur iş ilanları', 'online iş başvurusu',
+    // İstanbul iş ilanları
+    'istanbul\'da iş ilanları ve maaşları', 'istanbul\'da yatılı iş ilanları bay',
+    'dolgun maaşlı vasıfsız iş ilanları istanbul avrupa', '55-60 yaş iş ilanları istanbul avrupa yakası',
+    'sahibinden.com iş ilanları istanbul avrupa yakası', 'istanbul\'da yatılı iş ilanları bayan',
+    'istanbul\'da yatılı iş ilanları bayan sahibinden',
+    // Kocaeli İzmit iş ilanları
+    'kocaeli iş ilanları izmit', '50+55 yaş iş ilanları kocaeli',
+    'sahibinden iş ilanları izmit kocaeli', 'kocaeli iş ilanları facebook',
+    'kocaeli bayan iş ilanları işkur', '15-18 yaş arası iş ilanları kocaeli izmit',
+    'gölcük iş ilanları', 'kocaeli iş ilanları işkur', 'izmit iş ilanları',
+    // Bursa iş ilanları
+    'bursa iş ilanları lescard', '50-55 yaş iş ilanları bursa',
+    'bursa\'da günlük yevmiyeli iş', 'bursa fabrika iş ilanları vasıfsız',
+    'bursa nilüfer iş ilanları', '45 50 yaş arası iş ilanları bursa',
+    'sahibinden iş ilanları nilüfer bursa', '55-60 yaş iş ilanları bursa',
+    'bursa iş ilanları sahibinden',
+    // İzmir iş ilanları
+    'izmir\'deki fabrika iş ilanları', 'yeni asır iş ilanları bugün',
+    'izmir iş ilanları bayan', 'günlük peşin para iş izmir',
+    'izmir\'de yatılı iş ilanları bay sahibinden', '55-60 yaş iş ilanları izmir',
+    'yeni asır iş ilanları', 'ofis çay temizlik iş ilanları izmir',
+    'izmir otel iş ilanları', 'izmir iş ilanları bayan',
+    // Antalya iş ilanları
+    'antalya iş ilanları otel', '50+55 yaş iş ilanları antalya',
+    'antalya işkur\'dan iş ilanları', 'antalya iş ilanları lescard',
+    '12 ay açık otel iş ilanları serik antalya', 'antalya kepez işkur iş ilanları',
+    'antalya iş ilanları facebook', 'antalya yatılı iş ilanları sahibinden',
+    'antalya iş ilanları otel',
+    // Muğla Bodrum iş ilanları
+    'bodrum iş ilanları', 'muğla iş ilanları',
+    // Ankara iş ilanları
+    'ankara kızılay\'da iş ilanları bugün', 'ankara iş ilanları bayan',
+    '50+55 yaş iş ilanları ankara', 'ankara çankaya sahibinden iş ilanları',
+    'ankara iş ilanları lescard', 'sahibinden.com iş ilanları ankara',
+    '40 yaş bayan iş ilanları ankara', 'sahibinden iş ilanları yenimahalle ankara',
+    'ankara part time iş'
+  ],
+  url: window.location.pathname
+   });
 
     // Add structured data for homepage job listings
     const jobListSchema = {
