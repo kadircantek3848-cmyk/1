@@ -394,6 +394,19 @@ Sadece başlıkları listele, virgülle ayır.
     }
   }
 
+  // Kullanıcı tarafından blog yazısı oluştur
+  async createPost(postData: any): Promise<string | null> {
+    try {
+      const postRef = push(ref(db, 'blog_posts'));
+      await set(postRef, postData);
+      console.log('✅ Blog yazısı oluşturuldu:', postRef.key);
+      return postRef.key;
+    } catch (error) {
+      console.error('❌ Blog yazısı oluşturma hatası:', error);
+      return null;
+    }
+  }
+
   // JSON temizleme yardımcı fonksiyonu
   private cleanJsonResponse(response: string): string {
     try {
