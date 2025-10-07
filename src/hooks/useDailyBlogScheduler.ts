@@ -5,10 +5,6 @@ export function useDailyBlogScheduler() {
   useEffect(() => {
     const checkAndCreateDailyPost = async () => {
       try {
-        // Sadece admin kullanıcılar için çalışsın
-        const isAdmin = localStorage.getItem('isAdmin') === 'true';
-        if (!isAdmin) return;
-
         console.log('📅 Günlük blog kontrolü yapılıyor...');
         await blogService.scheduleDailyPost();
       } catch (error) {
