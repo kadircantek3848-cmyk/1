@@ -207,16 +207,24 @@ export function generateMetaTags(options: {
 
   // ✅ JobPosting Schema - Her sayfa yüklendiğinde güncellenir
   if (jobData) {
-    const existingScript = document.querySelector('script[type="application/ld+json"][data-job="true"]');
-    if (existingScript) {
-      existingScript.remove();
-    }
+    // Eski JobPosting schema'larını temizle
+    const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
+    existingScripts.forEach(script => {
+      try {
+        const data = JSON.parse(script.textContent || '');
+        if (data['@type'] === 'JobPosting') {
+          script.remove();
+        }
+      } catch (e) {
+        // Parse hatası, devam et
+      }
+    });
 
     const structuredData = generateJobPostingJsonLd(jobData);
 
     const script = document.createElement('script');
     script.type = 'application/ld+json';
-    script.setAttribute('data-job', 'true');
+    // data-job attribute'unu kaldırdık - Google için daha temiz
     script.textContent = JSON.stringify(structuredData, null, 2);
     document.head.appendChild(script);
   }
