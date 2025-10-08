@@ -207,26 +207,28 @@ export function generateMetaTags(options: {
 
   // ✅ JobPosting Schema - Her sayfa yüklendiğinde güncellenir
   if (jobData) {
-    // Eski JobPosting schema'larını temizle
-    const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
-    existingScripts.forEach(script => {
-      try {
-        const data = JSON.parse(script.textContent || '');
-        if (data['@type'] === 'JobPosting') {
-          script.remove();
-        }
-      } catch (e) {
-        // Parse hatası, devam et
-      }
-    });
-
     const structuredData = generateJobPostingJsonLd(jobData);
 
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    // data-job attribute'unu kaldırdık - Google için daha temiz
-    script.textContent = JSON.stringify(structuredData, null, 2);
-    document.head.appendChild(script);
+    // index.html'deki generic schema'yı güncelle (varsa)
+    let schemaScript = document.getElementById('jobposting-schema');
+    
+    if (schemaScript) {
+      // Generic schema'yı gerçek verilerle güncelle
+      schemaScript.textContent = JSON.stringify(structuredData, null, 2);
+    } else {
+      // Yoksa yeni oluştur
+      schemaScript = document.createElement('script');
+      schemaScript.type = 'application/ld+json';
+      schemaScript.id = 'jobposting-schema';
+      schemaScript.textContent = JSON.stringify(structuredData, null, 2);
+      document.head.appendChild(schemaScript);
+    }
+  } else {
+    // Ana sayfada veya ilan olmayan sayfalarda generic schema'yı koru
+    const schemaScript = document.getElementById('jobposting-schema');
+    if (schemaScript && schemaScript.textContent.includes('"value": "generic"')) {
+      // Generic schema zaten var, dokunma
+    }
   }
 }
 
