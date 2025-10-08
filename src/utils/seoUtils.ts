@@ -31,6 +31,30 @@ export function generateJobUrl(job: any): string {
   return `/ilan/${slug}`;
 }
 
+// ✅ YENİ: Lokasyon bilgisini parse eden fonksiyon
+function parseLocation(location: string): { city: string; district: string } {
+  if (!location) {
+    return { city: "Türkiye", district: "" };
+  }
+
+  // "İzmir, Konak" veya "İzmir - Konak" formatını ayır
+  const parts = location.split(/[,\-]/);
+  
+  if (parts.length >= 2) {
+    return {
+      city: parts[0].trim(),
+      district: parts[1].trim()
+    };
+  }
+  
+  // Tek kelime varsa (örn: "İzmir"), hem city hem district olarak kullan
+  return {
+    city: parts[0].trim(),
+    district: ""
+  };
+}
+
+// ✅ GÜNCELLENMIŞ generateJobPostingJsonLd - Google GSC Hatalarını Çözer
 export function generateJobPostingJsonLd(job: any) {
   const cleanDescription = (job.description || "İş tanımı")
     .replace(/<[^>]*>/g, ' ')
@@ -41,7 +65,11 @@ export function generateJobPostingJsonLd(job: any) {
     ? cleanDescription + " Detaylı bilgi için ilan sayfasını ziyaret edin. Bu pozisyon için hemen başvurun ve kariyerinize yeni bir yön verin."
     : cleanDescription;
 
-  const jsonLd = {
+  // ✅ Lokasyonu parse et
+  const locationData = parseLocation(job.location);
+
+  // ✅ Temel schema yapısı
+  const jsonLd: any = {
     "@context": "https://schema.org",
     "@type": "JobPosting",
     "title": job.title || "İş İlanı",
@@ -55,13 +83,13 @@ export function generateJobPostingJsonLd(job: any) {
       "sameAs": "https://isilanlarim.org",
       "logo": "https://isilanlarim.org/logo.png"
     },
+    // ✅ DÜZELTİLMİŞ: Adres yapısı Google gereksinimlerine tam uyumlu
     "jobLocation": {
       "@type": "Place",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": job.location || "Türkiye",
-        "addressRegion": job.location || "Türkiye",
-        "addressCountry": "TR"
+        "addressRegion": locationData.city,  // İl seviyesi (ZORUNLU)
+        "addressCountry": "TR"                // Ülke kodu (ZORUNLU)
       }
     },
     "identifier": {
@@ -72,6 +100,12 @@ export function generateJobPostingJsonLd(job: any) {
     "url": `https://isilanlarim.org/ilan/${generateSlug(job.title)}`
   };
 
+  // ✅ İlçe varsa ekle (ÖNERİLEN)
+  if (locationData.district) {
+    jsonLd.jobLocation.address.addressLocality = locationData.district;
+  }
+
+  // ✅ Deneyim gereksinimleri
   if (job.experienceLevel) {
     jsonLd["experienceRequirements"] = {
       "@type": "OccupationalExperienceRequirements",
@@ -79,6 +113,7 @@ export function generateJobPostingJsonLd(job: any) {
     };
   }
 
+  // ✅ Eğitim gereksinimleri
   if (job.educationLevel) {
     jsonLd["educationRequirements"] = {
       "@type": "EducationalOccupationalCredential",
@@ -86,6 +121,7 @@ export function generateJobPostingJsonLd(job: any) {
     };
   }
 
+  // ✅ Maaş bilgisi (Google ÖNERİSİ)
   if (job.salary && job.salary !== "0" && job.salary !== "0₺") {
     const salaryValue = extractSalaryAmount(job.salary);
     if (salaryValue > 0) {
@@ -101,10 +137,12 @@ export function generateJobPostingJsonLd(job: any) {
     }
   }
 
+  // ✅ Uzaktan çalışma desteği
   if (job.type === 'Uzaktan' || job.type === 'Remote') {
     jsonLd["jobLocationType"] = "TELECOMMUTE";
   }
 
+  // ✅ İletişim bilgileri
   if (job.contactEmail || job.contactPhone) {
     jsonLd["applicationContact"] = {
       "@type": "ContactPoint",
@@ -113,6 +151,7 @@ export function generateJobPostingJsonLd(job: any) {
     };
   }
 
+  // ✅ Sektör ve kategori bilgileri
   if (job.category) {
     jsonLd["industry"] = job.category;
   }
@@ -166,6 +205,7 @@ export function generateMetaTags(options: {
   }
   canonical.setAttribute('href', `https://isilanlarim.org${url}`);
 
+  // ✅ JobPosting Schema - Her sayfa yüklendiğinde güncellenir
   if (jobData) {
     const existingScript = document.querySelector('script[type="application/ld+json"][data-job="true"]');
     if (existingScript) {
