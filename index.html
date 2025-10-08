@@ -148,7 +148,7 @@
     }
     </script>
 
-    <!-- JobPosting Schema for Homepage -->
+    <!-- WebSite Schema -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -166,6 +166,40 @@
         "name": "İş İlanları ve Kariyer Fırsatları",
         "description": "Güncel iş ilanları, kariyer fırsatları ve CV oluşturma hizmetleri"
       }
+    }
+    </script>
+
+    <!-- ✅ YENİ: Generic JobPosting Schema (JavaScript ile güncellenecek) -->
+    <!-- Bu schema, ilan detay sayfalarında JavaScript tarafından dinamik olarak değiştirilecek -->
+    <script type="application/ld+json" id="jobposting-schema">
+    {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "title": "Güncel İş İlanları - İşBuldum",
+      "description": "Türkiye'nin en güncel iş ilanları platformunda binlerce iş fırsatı sizi bekliyor. Hemen başvurun ve kariyerinize yön verin.",
+      "datePosted": "2025-01-01T00:00:00+03:00",
+      "validThrough": "2025-12-31T23:59:59+03:00",
+      "employmentType": "FULL_TIME",
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": "İşBuldum",
+        "sameAs": "https://isilanlarim.org",
+        "logo": "https://isilanlarim.org/logo.png"
+      },
+      "jobLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "Türkiye",
+          "addressCountry": "TR"
+        }
+      },
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "job-id",
+        "value": "generic"
+      },
+      "url": "https://isilanlarim.org"
     }
     </script>
   </head>
