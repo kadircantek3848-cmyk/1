@@ -1,484 +1,284 @@
+// src/components/job/SEOJobContent.tsx
 import React from 'react';
-import { Briefcase, Search, FileText, TrendingUp, Users, MapPin, Clock, Star, CheckCircle, ArrowRight, Target, Award, Building2, Globe, Zap, Heart, Shield, Lightbulb } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
-interface SEOJobContentProps {
-  jobData?: {
-    category?: string;
-    location?: string;
-    type?: string;
-    title?: string;
-  };
-}
-
-export function SEOJobContent({ jobData }: SEOJobContentProps) {
-  const currentYear = new Date().getFullYear();
-  
+export function SEOJobContent() {
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-blue-50 mt-8 sm:mt-12 p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl">
-      <div className="max-w-6xl mx-auto space-responsive">
-        
-        {/* Ana Başlık */}
-        <div className="text-center">
-          <h2 className="text-responsive-xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-3">
-            <Briefcase className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
-            İşBuldum - İş İlanları ve Kariyer Fırsatları Rehberi {currentYear}
-          </h2>
-          <p className="text-responsive-sm text-gray-700 max-w-4xl mx-auto leading-relaxed">
-            <strong>İşBuldum 2025</strong> - Türkiye'nin en hızlı iş bulma platformunda <strong>50.000+</strong> güncel iş fırsatı sizi bekliyor. 
-            <strong>İş arama</strong> sürecinizden <strong>CV hazırlamaya</strong>, <strong>mülakat tekniklerinden</strong> <strong>kariyer planlamasına</strong> kadar 
-            ihtiyacınız olan her şey burada. <strong>İstanbul iş ilanları</strong>, <strong>Ankara iş ilanları</strong>, <strong>İzmir iş ilanları</strong> ve 
-            tüm Türkiye'de <strong>güncel iş fırsatları</strong>.
-          </p>
-        </div>
-
-        {/* İş Arama Rehberi */}
-        <section>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-responsive">
-          <div className="bg-white p-responsive rounded-xl shadow-sm border border-gray-100">
-            <div className="flex items-center gap-3 mb-4">
-              <Search className="h-6 w-6 text-blue-600" />
-              <h3 className="text-responsive-base font-semibold text-gray-900">İş Arama Stratejileri 2025</h3>
-            </div>
-            <p className="text-responsive-sm text-gray-700 mb-4">
-              <strong>Etkili iş arama stratejileri</strong> ile hayalinizdeki işi bulun. <strong>Doğru anahtar kelimeler</strong>, 
-              <strong>filtreleme teknikleri</strong> ve <strong>başvuru süreçleri</strong> hakkında bilgi edinin. <strong>İş ilanları 2025</strong> 
-              trendlerini takip edin.
-            </p>
-            <ul className="space-y-2 text-responsive-xs text-gray-600">
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <strong>Anahtar kelime</strong> optimizasyonu
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <strong>Gelişmiş filtreleme</strong> seçenekleri
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <strong>Şirket araştırması</strong> teknikleri
-              </li>
-            </ul>
-          </div>
-
-          <div className="bg-white p-responsive rounded-xl shadow-sm border border-gray-100">
-            <div className="flex items-center gap-3 mb-4">
-              <FileText className="h-6 w-6 text-green-600" />
-              <h3 className="text-responsive-base font-semibold text-gray-900">CV Hazırlama Rehberi 2025</h3>
-            </div>
-            <p className="text-responsive-sm text-gray-700 mb-4">
-              <strong>Profesyonel CV hazırlama teknikleri</strong> ile öne çıkın. <strong>Modern CV formatları</strong>, 
-              <strong>ATS uyumlu şablonlar</strong> ve <strong>dikkat çeken özgeçmiş örnekleri</strong>. <strong>Ücretsiz CV oluştur</strong> 
-              araçlarımızla <strong>CV hazırlamak</strong> artık çok kolay.
-            </p>
-            <ul className="space-y-2 text-responsive-xs text-gray-600">
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <strong>ATS uyumlu</strong> CV formatları
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <strong>Sektöre özel</strong> CV örnekleri
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <strong>Ücretsiz CV oluşturma</strong> araçları
-              </li>
-            </ul>
-            <Link 
-              to="/cv-olustur" 
-              className="inline-flex items-center gap-2 mt-4 text-green-600 hover:text-green-700 font-medium text-responsive-xs"
-            >
-              <strong>Ücretsiz CV Oluştur</strong> <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <div className="bg-white p-responsive rounded-xl shadow-sm border border-gray-100">
-            <div className="flex items-center gap-3 mb-4">
-              <TrendingUp className="h-6 w-6 text-purple-600" />
-              <h3 className="text-responsive-base font-semibold text-gray-900">Kariyer Gelişimi ve Planlama</h3>
-            </div>
-            <p className="text-responsive-sm text-gray-700 mb-4">
-              <strong>Kariyerinizi</strong> bir sonraki seviyeye taşıyacak <strong>stratejiler</strong>. <strong>Beceri geliştirme</strong>, 
-              <strong>networking</strong> ve <strong>profesyonel gelişim fırsatları</strong>. <strong>Kariyer fırsatları 2025</strong> 
-              trendlerini keşfedin.
-            </p>
-            <ul className="space-y-2 text-responsive-xs text-gray-600">
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <strong>Beceri geliştirme</strong> programları
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <strong>Networking</strong> stratejileri
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <strong>Mülakat hazırlık</strong> teknikleri
-              </li>
-            </ul>
-          </div>
-          </div>
-        </section>
-
-        {/* Sektör Bazlı İş Fırsatları */}
-        <section>
-          <h2 className="text-responsive-lg font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <Building2 className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
-            Sektör Bazlı İş İlanları ve Kariyer Fırsatları 2025
-          </h2>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-responsive">
-            {[
-              { 
-                sector: 'Teknoloji İş İlanları 2025', 
-                jobs: ['Yazılım Geliştirici İş İlanları', 'Veri Analisti İş İlanları', 'Siber Güvenlik İş İlanları', 'DevOps Mühendisi İş İlanları'],
-                icon: <Zap className="h-5 w-5" />,
-                color: 'blue'
-              },
-              { 
-                sector: 'Sağlık İş İlanları 2025', 
-                jobs: ['Doktor İş İlanları', 'Hemşire İş İlanları', 'Fizyoterapist İş İlanları', 'Eczacı İş İlanları'],
-                icon: <Heart className="h-5 w-5" />,
-                color: 'red'
-              },
-              { 
-                sector: 'Eğitim İş İlanları 2025', 
-                jobs: ['Öğretmen İş İlanları', 'Akademisyen İş İlanları', 'Eğitim Koordinatörü İş İlanları', 'Rehber Öğretmen İş İlanları'],
-                icon: <Lightbulb className="h-5 w-5" />,
-                color: 'yellow'
-              },
-              { 
-                sector: 'Finans İş İlanları 2025', 
-                jobs: ['Muhasebeci İş İlanları', 'Mali Müşavir İş İlanları', 'Finansal Analist İş İlanları', 'Banka Personeli İş İlanları'],
-                icon: <TrendingUp className="h-5 w-5" />,
-                color: 'green'
-              },
-              { 
-                sector: 'İnşaat İş İlanları 2025', 
-                jobs: ['İnşaat Mühendisi İş İlanları', 'Mimar İş İlanları', 'Şantiye Şefi İş İlanları', 'İnşaat İşçisi İş İlanları'],
-                icon: <Building2 className="h-5 w-5" />,
-                color: 'orange'
-              },
-              { 
-                sector: 'Satış İş İlanları 2025', 
-                jobs: ['Satış Temsilcisi İş İlanları', 'Pazarlama Uzmanı İş İlanları', 'Mağaza Müdürü İş İlanları', 'E-ticaret Uzmanı İş İlanları'],
-                icon: <Target className="h-5 w-5" />,
-                color: 'purple'
-              },
-              { 
-                sector: 'Lojistik İş İlanları 2025', 
-                jobs: ['Şoför İş İlanları', 'Depo Görevlisi İş İlanları', 'Kargo Personeli İş İlanları', 'Lojistik Uzmanı İş İlanları'],
-                icon: <Globe className="h-5 w-5" />,
-                color: 'indigo'
-              },
-              { 
-                sector: 'Güvenlik İş İlanları 2025', 
-                jobs: ['Güvenlik Görevlisi İş İlanları', 'Bekçi İş İlanları', 'Güvenlik Amiri İş İlanları', 'Kamera Operatörü İş İlanları'],
-                icon: <Shield className="h-5 w-5" />,
-                color: 'gray'
-              }
-            ].map((item, index) => (
-              <div key={index} className="bg-white p-responsive rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <div className={`flex items-center gap-2 mb-3 text-${item.color}-600`}>
-                  {item.icon}
-                  <h4 className="text-responsive-sm font-semibold text-gray-900">{item.sector}</h4>
-                </div>
-                <ul className="space-y-1">
-                  {item.jobs.map((job, jobIndex) => (
-                    <li key={jobIndex} className="text-responsive-xs text-gray-600 hover:text-blue-600 cursor-pointer transition-colors font-medium">
-                      • {job}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Şehir Bazlı İş İlanları */}
-        <section>
-          <h2 className="text-responsive-lg font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <MapPin className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
-            Şehir Bazlı İş İlanları ve Bölgesel Fırsatlar 2025
-          </h2>
-          
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-            {[
-              'İstanbul İş İlanları', 'Ankara İş İlanları', 'İzmir İş İlanları', 'Bursa İş İlanları', 
-              'Antalya İş İlanları', 'Adana İş İlanları', 'Konya İş İlanları', 'Gaziantep İş İlanları',
-              'Mersin İş İlanları', 'Kayseri İş İlanları', 'Eskişehir İş İlanları', 'Diyarbakır İş İlanları',
-              'Samsun İş İlanları', 'Denizli İş İlanları', 'Şanlıurfa İş İlanları', 'Adapazarı İş İlanları',
-              'Malatya İş İlanları', 'Kahramanmaraş İş İlanları', 'Erzurum İş İlanları', 'Van İş İlanları'
-            ].map((city, index) => (
-              <div key={index} className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-100 hover:border-blue-200 transition-colors cursor-pointer touch-target">
-                <div className="text-responsive-xs font-semibold text-gray-900 hover:text-blue-600 transition-colors">
-                  {city}
-                </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  Güncel fırsatlar
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Çalışma Şekilleri */}
-        <section>
-          <h2 className="text-responsive-lg font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <Clock className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
-            Çalışma Şekillerine Göre İş İlanları 2025
-          </h2>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-responsive">
-            {[
-              {
-                type: 'Tam Zamanlı İş İlanları 2025',
-                description: 'Haftalık 40 saat çalışma ile tam zamanlı pozisyonlar. Sosyal güvence ve kariyer gelişimi.',
-                features: ['Sosyal güvence', 'Ücretli izin', 'Performans primi', 'Kariyer gelişimi']
-              },
-              {
-                type: 'Part Time İş İlanları 2025',
-                description: 'Esnek çalışma saatleri ile yarı zamanlı fırsatlar. Öğrenciler ve ek gelir isteyenler için ideal.',
-                features: ['Esnek saatler', 'Ek gelir', 'Deneyim kazanma', 'Öğrenci dostu']
-              },
-              {
-                type: 'Remote İş İlanları 2025',
-                description: 'Evden çalışma imkanı sunan uzaktan çalışma pozisyonları. İş-yaşam dengesi için mükemmel.',
-                features: ['Evden çalışma', 'Zaman tasarrufu', 'Coğrafi özgürlük', 'İş-yaşam dengesi']
-              },
-              {
-                type: 'Freelance İş İlanları 2025',
-                description: 'Proje bazlı çalışma ile serbest meslek fırsatları. Özgür çalışma ve yüksek kazanç potansiyeli.',
-                features: ['Proje bazlı', 'Özgür çalışma', 'Çoklu proje', 'Yüksek kazanç']
-              }
-            ].map((workType, index) => (
-              <div key={index} className="bg-white p-responsive rounded-xl shadow-sm border border-gray-100">
-                <h3 className="text-responsive-sm font-semibold text-gray-900 mb-2">{workType.type}</h3>
-                <p className="text-responsive-xs text-gray-600 mb-4">{workType.description}</p>
-                <ul className="space-y-1">
-                  {workType.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="text-xs text-gray-500 flex items-center gap-2">
-                      <Star className="h-3 w-3 text-yellow-500" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* İş Arama İpuçları */}
-        <section>
-          <h2 className="text-responsive-lg font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <Award className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
-            Başarılı İş Arama İpuçları ve Kariyer Tavsiyeleri 2025
-          </h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-responsive">
-            <div className="space-responsive">
-              <div className="bg-white p-responsive rounded-xl shadow-sm border border-gray-100">
-                <h4 className="text-responsive-sm font-semibold text-gray-900 mb-3">İş İlanı Başvuru Süreci</h4>
-                <ol className="space-y-3 text-responsive-xs text-gray-700">
-                  <li className="flex items-start gap-3">
-                    <span className="bg-blue-100 text-blue-600 rounded-full w-6 h-6 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">1</span>
-                    <span><strong>İlan detaylarını</strong> dikkatlice okuyun ve gereksinimlerle uyumunuzu değerlendirin</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="bg-blue-100 text-blue-600 rounded-full w-6 h-6 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">2</span>
-                    <span><strong>CV'nizi</strong> pozisyona özel olarak güncelleyin ve <strong>anahtar kelimeleri</strong> dahil edin</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="bg-blue-100 text-blue-600 rounded-full w-6 h-6 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">3</span>
-                    <span><strong>Ön yazı hazırlayın</strong> ve motivasyonunuzu net bir şekilde ifade edin</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="bg-blue-100 text-blue-600 rounded-full w-6 h-6 flex items-center justify-center text-xs font-medium flex-shrink-0 mt-0.5">4</span>
-                    <span><strong>Başvurunuzu</strong> zamanında gönderin ve takip edin</span>
-                  </li>
-                </ol>
-              </div>
-
-              <div className="bg-white p-responsive rounded-xl shadow-sm border border-gray-100">
-                <h4 className="text-responsive-sm font-semibold text-gray-900 mb-3">Mülakat Hazırlığı</h4>
-                <ul className="space-y-2 text-responsive-xs text-gray-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    <strong>Şirket hakkında</strong> detaylı araştırma yapın
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    Yaygın <strong>mülakat sorularına</strong> hazırlanın
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    <strong>Kıyafet seçiminizi</strong> şirket kültürüne uygun yapın
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                    <strong>Sorularınızı</strong> önceden hazırlayın
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="space-responsive">
-              <div className="bg-white p-responsive rounded-xl shadow-sm border border-gray-100">
-                <h4 className="text-responsive-sm font-semibold text-gray-900 mb-3">Kariyer Planlama</h4>
-                <p className="text-responsive-xs text-gray-700 mb-4">
-                  <strong>Uzun vadeli kariyer hedeflerinizi</strong> belirleyin ve bu doğrultuda adımlar atın. 
-                  <strong>Sürekli öğrenme</strong> ve <strong>gelişim odaklı</strong> bir yaklaşım benimseyin. <strong>Kariyer fırsatları 2025</strong> 
-                  trendlerini takip edin.
-                </p>
-                <ul className="space-y-2 text-responsive-xs text-gray-600">
-                  <li>• Kısa ve uzun vadeli hedefler belirleyin</li>
-                  <li>• Becerilerinizi sürekli geliştirin</li>
-                  <li>• Sektör trendlerini takip edin</li>
-                  <li>• Profesyonel network oluşturun</li>
-                  <li>• Mentorluk fırsatlarını değerlendirin</li>
-                </ul>
-              </div>
-
-              <div className="bg-white p-responsive rounded-xl shadow-sm border border-gray-100">
-                <h4 className="text-responsive-sm font-semibold text-gray-900 mb-3">Dijital Varlık Yönetimi</h4>
-                <p className="text-responsive-xs text-gray-700 mb-4">
-                  Günümüzde <strong>işverenler</strong> adayları <strong>online platformlarda</strong> araştırıyor. 
-                  <strong>Dijital varlığınızı</strong> profesyonel bir şekilde yönetin. <strong>LinkedIn profil optimizasyonu</strong> 
-                  ve <strong>sosyal medya</strong> stratejileri önemli.
-                </p>
-                <ul className="space-y-2 text-responsive-xs text-gray-600">
-                  <li>• LinkedIn profilinizi güncel tutun</li>
-                  <li>• Sosyal medya hesaplarınızı gözden geçirin</li>
-                  <li>• Profesyonel e-posta adresi kullanın</li>
-                  <li>• Online portfolyo oluşturun</li>
-                  <li>• Sektörel içerikleri takip edin ve paylaşın</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* İstatistikler ve Trendler */}
-        <section className="bg-white p-responsive rounded-xl shadow-sm border border-gray-100">
-          <h2 className="text-responsive-lg font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <TrendingUp className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
-            İş Piyasası Trendleri ve İstatistikleri {currentYear}
-          </h2>
-          
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-responsive">
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">50K+</div>
-              <div className="text-responsive-xs text-gray-600">Günlük Yeni İlan</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-2">81</div>
-              <div className="text-responsive-xs text-gray-600">İl Genelinde Fırsat</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-purple-600 mb-2">25+</div>
-              <div className="text-responsive-xs text-gray-600">Farklı Sektör</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-orange-600 mb-2">7/24</div>
-              <div className="text-responsive-xs text-gray-600">Güncel İlan Akışı</div>
-            </div>
-          </div>
-
-          <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-3 gap-responsive">
-            <div>
-              <h3 className="text-responsive-sm font-semibold text-gray-900 mb-3">En Çok Aranan Pozisyonlar 2025</h3>
-              <ul className="space-y-1 text-responsive-xs text-gray-600">
-                <li><strong>1. Yazılım Geliştirici İş İlanları</strong></li>
-                <li><strong>2. Satış Temsilcisi İş İlanları</strong></li>
-                <li><strong>3. Muhasebeci İş İlanları</strong></li>
-                <li><strong>4. Öğretmen İş İlanları</strong></li>
-                <li><strong>5. Hemşire İş İlanları</strong></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-responsive-sm font-semibold text-gray-900 mb-3">Yükselen Sektörler 2025</h3>
-              <ul className="space-y-1 text-responsive-xs text-gray-600">
-                <li>• <strong>E-ticaret ve Dijital Pazarlama</strong></li>
-                <li>• <strong>Sağlık Teknolojileri</strong></li>
-                <li>• <strong>Yenilenebilir Enerji</strong></li>
-                <li>• <strong>Fintech ve Blockchain</strong></li>
-                <li>• <strong>Uzaktan Çalışma Çözümleri</strong></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-responsive-sm font-semibold text-gray-900 mb-3">Gelecek Becerileri 2025</h3>
-              <ul className="space-y-1 text-responsive-xs text-gray-600">
-                <li>• <strong>Yapay Zeka ve Makine Öğrenmesi</strong></li>
-                <li>• <strong>Veri Analizi ve Görselleştirme</strong></li>
-                <li>• <strong>Dijital Pazarlama</strong></li>
-                <li>• <strong>Proje Yönetimi</strong></li>
-                <li>• <strong>Çok Dilli İletişim</strong></li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Son Çağrı */}
-        <section className="text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white p-responsive rounded-xl">
-          <h2 className="text-responsive-lg font-bold mb-4">Hayalinizdeki İşe Bugün Başlayın!</h2>
-          <p className="text-responsive-sm mb-6 opacity-90">
-            <strong>50.000+</strong> güncel iş ilanı arasından size en uygun pozisyonu bulun. 
-            <strong>İşBuldum</strong> ile hızlı iş bulun ve <strong>ücretsiz CV oluşturma</strong> araçlarımızla profesyonel özgeçmişinizi hazırlayın.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link 
-              to="/" 
-              className="bg-white text-blue-600 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center gap-2 touch-target"
-            >
-              <Search className="h-5 w-5" />
-              İş İlanlarını İncele
-            </Link>
-            <Link 
-              to="/cv-olustur" 
-              className="bg-transparent border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors inline-flex items-center justify-center gap-2 touch-target"
-            >
-              <FileText className="h-5 w-5" />
-              Ücretsiz CV Oluştur
-            </Link>
-          </div>
-        </section>
-
-        {/* Anahtar Kelime Yoğun Alt Metin */}
-        <section className="text-center text-responsive-xs text-gray-600 leading-relaxed">
-          <p className="mb-4">
-            <strong>İşBuldum 2025</strong> - Türkiye'nin en hızlı <strong>iş bulma platformu</strong> olan İşBuldum'da 
-            <strong> iş ara</strong>, <strong>iş bul</strong>, <strong>kariyer fırsatları</strong> keşfet ve <strong>ücretsiz iş ilanı ver istanbul</strong> seçeneğiyle hemen ilan yayınla. 
-            <strong>İş ilanı ver</strong>, <strong>eleman ara</strong>, <strong>personel bul</strong> seçenekleriyle işverenler ve iş arayanları buluşturuyoruz. 
-            <strong>Güncel iş ilanları</strong>, <strong>yeni iş fırsatları</strong>, <strong>part time iş ilanları</strong>, <strong>tam zamanlı iş ilanları</strong>, 
-            <strong>uzaktan çalışma iş ilanları</strong>, <strong>freelance iş ilanları</strong> seçenekleriyle her ihtiyaca uygun pozisyonlar.
-          </p>
-          <p className="mb-4">
-            <strong>İstanbul iş ilanları</strong>, <strong>Ankara iş ilanları</strong>, <strong>İzmir iş ilanları</strong> 
-            başta olmak üzere 81 ilde <strong>iş imkanları</strong>. <strong>Teknoloji iş ilanları</strong>, <strong>sağlık iş ilanları</strong>, 
-            <strong>eğitim iş ilanları</strong>, <strong>mühendis iş ilanları</strong> ve <strong>makine mühendisi iş ilanları</strong> pozisyonları, 
-            <strong>garson iş ilanları</strong>, <strong>aşçı yardımcısı iş ilanları</strong>, <strong>resepsiyon görevlisi iş ilanları</strong>, 
-            <strong>özel güvenlik iş ilanları</strong> ve daha birçok sektörde <strong>kariyer fırsatları</strong>. <strong>İş başvurusu</strong> yapmak, 
-            <strong>CV hazırlamak</strong>, <strong>mülakat hazırlığı</strong> yapmak için gerekli tüm araçlar platformumuzda.
-          </p>
-          <p>
-            <strong>İş arama motoru</strong> özelliğimizle filtreleme yapın, <strong>iş ilanı ara</strong>, <strong>pozisyon ara</strong>, 
-            <strong>şirket ara</strong> seçenekleriyle aradığınızı kolayca bulun. <strong>Evde paketleme iş ilanları</strong>, 
-            <strong>kurye iş ilanları</strong>, <strong>bahçelievler kurye iş ilanları</strong>, <strong>getir kurye iş ilanları</strong>, 
-            <strong>müşteri hizmetleri temsilcisi iş ilanları</strong> gibi popüler aramalara uygun ilanlar bulabilirsiniz. 
-            <strong>İş piyasası 2025</strong> trendlerini takip edin, <strong>maaş bilgileri</strong> edinin, <strong>kariyer rehberi</strong> 
-            ile gelişiminizi sürdürün. <strong>İş ilanı sitesi</strong> olarak amacımız en kaliteli <strong>iş fırsatlarını</strong> 
-            sizlerle buluşturmak ve <strong>kariyer yolculuğunuzda</strong> yanınızda olmaktır.
-          </p>
-          <p>
-            <strong>Döner ustası iş ilanları</strong>, <strong>çağrı merkezi çalışanı iş ilanları</strong>, <strong>market personeli iş ilanları</strong>, 
-            <strong>peyzaj mimarı iş ilanları</strong>, <strong>mekatronik mühendisi iş ilanları</strong> ve <strong>antalya uzaktan iş ilanları</strong> 
-            gibi spesifik aramalara yönelik içeriklerimizle her sektörden iş arayanlar için çözümler sunuyoruz. 
-            <strong>Dolgun maaşlı iş ilanları istanbul</strong>, <strong>düz işçi iş ilanları</strong>, <strong>yeni mezun iş ilanları</strong> 
-            ve <strong>deneyimsiz iş ilanları</strong> kategorilerimizle her seviyeden iş arayana hitap ediyoruz.
-          </p>
-        </section>
+    <div className="max-w-4xl mx-auto">
+      {/* Ana Başlık */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          İstanbul, Ankara ve İzmir'de İş İlanları 2025
+        </h1>
+        <p className="text-xl text-gray-600">
+          Güncel iş fırsatları, ücretsiz başvuru, hızlı işe giriş
+        </p>
       </div>
+
+      {/* Giriş Paragrafı */}
+      <div className="prose prose-lg max-w-none mb-12">
+        <p className="text-gray-700 leading-relaxed">
+          Türkiye'nin en büyük üç şehrinde iş arıyorsanız doğru yerdesiniz. İşBuldum 
+          platformunda İstanbul, Ankara ve İzmir'den güncel iş ilanlarını bulabilir, 
+          ücretsiz başvuru yapabilirsiniz. Şoför, garson, kasiyer, kurye, satış danışmanı 
+          ve çağrı merkezi pozisyonlarında yüzlerce aktif ilan sizleri bekliyor.
+        </p>
+      </div>
+
+      {/* İstanbul Bölümü */}
+      <section className="mb-12">
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          İstanbul İş İlanları - Avrupa ve Anadolu Yakası
+        </h2>
+        <div className="prose prose-lg max-w-none">
+          <p className="text-gray-700 leading-relaxed mb-4">
+            16 milyon nüfuslu İstanbul, Türkiye'nin ekonomik kalbidir. Kadıköy, Şişli, 
+            Beşiktaş, Üsküdar, Ümraniye, Pendik ve Kartal gibi merkezi ilçelerde sürekli 
+            istihdam fırsatları mevcuttur.
+          </p>
+          
+          <h3 className="text-2xl font-semibold text-gray-900 mt-6 mb-3">
+            İstanbul'da En Çok Aranan İşler
+          </h3>
+          <ul className="space-y-2 text-gray-700">
+            <li>
+              <strong>Transfer Şoförü:</strong> Kendi araçla veya şirket aracıyla esnek 
+              saatlerde çalışma imkanı. İstanbul genelinde 39 ilçede hizmet veren firmalar 
+              sürekli şoför arıyor.
+            </li>
+            <li>
+              <strong>Garson ve Servis Elemanı:</strong> Kadıköy, Beşiktaş ve Şişli'deki 
+              restoran, kafe ve otellerde yoğun talep var. Part-time ve tam zamanlı seçenekler.
+            </li>
+            <li>
+              <strong>Kasiyer:</strong> Anadolu ve Avrupa Yakası'ndaki market, AVM ve 
+              perakende mağazalarda sürekli personel aranıyor.
+            </li>
+            <li>
+              <strong>Kurye:</strong> Motor, bisiklet veya araçla çalışma seçenekleri. 
+              Getir, Trendyol gibi platformlar için kuryelik ilanları.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Ankara Bölümü */}
+      <section className="mb-12">
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          Ankara İş İlanları - Çankaya, Keçiören, Yenimahalle
+        </h2>
+        <div className="prose prose-lg max-w-none">
+          <p className="text-gray-700 leading-relaxed mb-4">
+            Başkent Ankara'da kamu kurumları, üniversiteler ve büyük şirketler istihdam 
+            sağlamaktadır. Çankaya, Keçiören, Yenimahalle, Etimesgut ve Mamak ilçelerinde 
+            aktif ilanlar mevcuttur.
+          </p>
+          
+          <h3 className="text-2xl font-semibold text-gray-900 mt-6 mb-3">
+            Ankara'da Popüler Pozisyonlar
+          </h3>
+          <ul className="space-y-2 text-gray-700">
+            <li>
+              <strong>Restoran Personeli:</strong> Çankaya ve Kızılay bölgesindeki 
+              restoran, kafe ve fast-food zincirlerde garson, banko personeli ve aşçı 
+              yardımcısı pozisyonları.
+            </li>
+            <li>
+              <strong>Kasiyer ve Satış Danışmanı:</strong> AVM'ler, marketler ve 
+              perakende mağazalarda sürekli eleman aranıyor. Part-time imkanları mevcut.
+            </li>
+            <li>
+              <strong>Modelist ve Tekstil Çalışanı:</strong> Ankara'da bulunan hazır 
+              giyim firmalarında modelist, dikiş ustası ve üretim elemanı ilanları.
+            </li>
+            <li>
+              <strong>Çağrı Merkezi:</strong> Keçiören ve Yenimahalle'deki call center 
+              firmalarında müşteri temsilcisi pozisyonları.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* İzmir Bölümü */}
+      <section className="mb-12">
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          İzmir İş İlanları - Konak, Bornova, Karşıyaka
+        </h2>
+        <div className="prose prose-lg max-w-none">
+          <p className="text-gray-700 leading-relaxed mb-4">
+            Ege'nin incisi İzmir'de turizm, ticaret ve sanayi sektörlerinde geniş iş 
+            imkanları vardır. Konak, Bornova, Karşıyaka, Alsancak, Buca, Çiğli ve 
+            Bayraklı bölgelerinde sürekli personel aranmaktadır.
+          </p>
+          
+          <h3 className="text-2xl font-semibold text-gray-900 mt-6 mb-3">
+            İzmir'de İş Fırsatları
+          </h3>
+          <ul className="space-y-2 text-gray-700">
+            <li>
+              <strong>Turizm Sektörü:</strong> Alsancak, Konak ve sahil bölgesindeki 
+              otel, restoran ve kafelerde servis elemanı, garson ve resepsiyonist ilanları.
+            </li>
+            <li>
+              <strong>Perakende:</strong> Bornova ve Karşıyaka'daki AVM'lerde kasiyer, 
+              satış danışmanı ve mağaza görevlisi pozisyonları.
+            </li>
+            <li>
+              <strong>Üretim:</strong> Çiğli ve Gaziemir'deki fabrika ve üretim 
+              tesislerinde operatör, montaj elemanı ve kalite kontrol personeli aranıyor.
+            </li>
+            <li>
+              <strong>Part-time İşler:</strong> Bornova'da üniversite öğrencilerine yönelik 
+              esnek saatli garson, kurye ve satış danışmanı pozisyonları.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Nasıl Başvuru Yapılır */}
+      <section className="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-12">
+        <h2 className="text-3xl font-bold text-gray-900 mb-6">
+          Nasıl Başvuru Yapılır?
+        </h2>
+        <ol className="space-y-4 text-gray-700">
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
+              1
+            </span>
+            <div>
+              <strong className="block mb-1">İlanı Seçin:</strong>
+              Yukarıdaki listeden ilgilendiğiniz pozisyonu bulun. Şehir, kategori veya 
+              anahtar kelime ile arama yapabilirsiniz.
+            </div>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
+              2
+            </span>
+            <div>
+              <strong className="block mb-1">Detayları İnceleyin:</strong>
+              İlan sayfasında maaş, çalışma saatleri, gereksinimler ve firma bilgilerini 
+              okuyun.
+            </div>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
+              3
+            </span>
+            <div>
+              <strong className="block mb-1">Başvur Butonuna Tıklayın:</strong>
+              İletişim bilgilerinizi paylaşın veya telefon numarasını arayarak başvurunuzu 
+              yapın.
+            </div>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
+              4
+            </span>
+            <div>
+              <strong className="block mb-1">Geri Dönüş Bekleyin:</strong>
+              İşverenler genellikle 24-48 saat içinde başvuruları değerlendirir ve size geri 
+              döner.
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      {/* Sıkça Sorulan Sorular */}
+      <section className="mb-12">
+        <h2 className="text-3xl font-bold text-gray-900 mb-6">
+          Sıkça Sorulan Sorular
+        </h2>
+        
+        <div className="space-y-6">
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Başvuru ücretsiz mi?
+            </h3>
+            <p className="text-gray-700">
+              Evet, İşBuldum'da tüm iş ilanlarına başvuru tamamen ücretsizdir. Hiçbir 
+              ücret talep edilmez.
+            </p>
+          </div>
+
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              CV gerekli mi?
+            </h3>
+            <p className="text-gray-700">
+              Çoğu ilan için CV gerekmez, sadece iletişim bilgilerinizi paylaşmanız yeterlidir. 
+              Ancak bazı firmalar CV isteyebilir.
+            </p>
+          </div>
+
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Part-time iş bulabilir miyim?
+            </h3>
+            <p className="text-gray-700">
+              Evet, platformumuzda hem tam zamanlı hem de part-time iş ilanları mevcuttur. 
+              Filtrelerden "Part Time" seçeneğini işaretleyerek bu ilanları görebilirsiniz.
+            </p>
+          </div>
+
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Deneyimsiz olarak başvurabilir miyim?
+            </h3>
+            <p className="text-gray-700">
+              Birçok ilan deneyimsiz adaylara açıktır. İlan detaylarında "deneyim gerekli 
+              değildir" veya "eğitim verilecektir" yazanları tercih edebilirsiniz.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Neden İşBuldum */}
+      <section className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-white">
+        <h2 className="text-3xl font-bold mb-6">
+          Neden İşBuldum?
+        </h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="flex items-start gap-3">
+            <svg className="w-6 h-6 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <h3 className="font-semibold mb-1">Güncel İlanlar</h3>
+              <p className="text-blue-100 text-sm">Her gün yeni iş fırsatları ekleniyor</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <svg className="w-6 h-6 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <h3 className="font-semibold mb-1">Ücretsiz Platform</h3>
+              <p className="text-blue-100 text-sm">Başvuru ve kullanım tamamen ücretsiz</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <svg className="w-6 h-6 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <h3 className="font-semibold mb-1">Hızlı Başvuru</h3>
+              <p className="text-blue-100 text-sm">Tek tıkla hemen başvuru yapın</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <svg className="w-6 h-6 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <h3 className="font-semibold mb-1">3 Büyük Şehir</h3>
+              <p className="text-blue-100 text-sm">İstanbul, Ankara ve İzmir'de geniş ilan ağı</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
