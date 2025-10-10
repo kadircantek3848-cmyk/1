@@ -34,33 +34,34 @@ export function SearchHero({
         {/* Hero Content */}
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight animate-fade-in">
-            ⚡ İşBuldum - Türkiye'nin En Hızlı İş Bulma Platformu
+            İşBuldum - Türkiye Geneli İş İlanları
           </h1>
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white/90 mb-6 animate-slide-up">
-            🔥 50.000+ Güncel İş İlanı • Dakikada 5 Yeni Fırsat • 7/24 Canlı Akış
+            15.000+ Güncel İş İlanı | Her Gün Yeni Fırsatlar
           </h2>
           <p className="text-base sm:text-lg text-white/80 mb-6 max-w-4xl mx-auto leading-relaxed animate-fade-in">
-            💼 <strong className="text-white">DME Group, Getir, Dominos, Burger King</strong> gibi büyük şirketlerin ilanları! 
-            🚀 <strong className="text-white">Dakikada 5 yeni ilan</strong> ekleniyor. 💰 <strong className="text-white">Yüksek maaşlı pozisyonlar</strong> İstanbul, Ankara, İzmir ve 81 ilde.
+            <strong className="text-white">Şoför, garson, kasiyer, kurye</strong> ve daha fazla pozisyon. 
+            <strong className="text-white"> Ücretsiz başvuru</strong> ile hemen iş aramaya başlayın. 
+            <strong className="text-white"> İstanbul, Ankara, İzmir</strong> ve tüm Türkiye'den güncel ilanlar.
           </p>
           
           {/* Quick Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 max-w-2xl mx-auto animate-slide-up">
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-white animate-pulse">50K+</div>
-              <div className="text-xs sm:text-sm text-white/70">🔥 Aktif İlan</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">15K+</div>
+              <div className="text-xs sm:text-sm text-white/70">Aktif İlan</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-white animate-pulse">5/dk</div>
-              <div className="text-xs sm:text-sm text-white/70">⚡ Yeni İlan</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">100+</div>
+              <div className="text-xs sm:text-sm text-white/70">Günlük Yeni İlan</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-white animate-pulse">25+</div>
-              <div className="text-xs sm:text-sm text-white/70">💼 Farklı Sektör</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">20+</div>
+              <div className="text-xs sm:text-sm text-white/70">Farklı Kategori</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-white animate-pulse">81</div>
-              <div className="text-xs sm:text-sm text-white/70">🏙️ İl Kapsamı</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white">81</div>
+              <div className="text-xs sm:text-sm text-white/70">İl Kapsamı</div>
             </div>
           </div>
         </div>
@@ -90,7 +91,7 @@ export function SearchHero({
 
           {/* Popular Cities */}
           <div className="mb-6">
-            <p className="text-gray-600 text-sm mb-3 font-medium">🏙️ Popüler Şehirler:</p>
+            <p className="text-gray-600 text-sm mb-3 font-medium">Popüler Şehirler:</p>
             <div className="flex flex-wrap gap-2">
               {['İstanbul', 'Ankara', 'İzmir', 'Bursa', 'Antalya', 'Adana'].map((city) => (
                 <button
@@ -106,7 +107,7 @@ export function SearchHero({
 
           {/* Popular Job Types */}
           <div className="mb-6">
-            <p className="text-gray-600 text-sm mb-3 font-medium">💼 Popüler Pozisyonlar:</p>
+            <p className="text-gray-600 text-sm mb-3 font-medium">Popüler Pozisyonlar:</p>
             <div className="flex flex-wrap gap-2">
               {[
                 { name: 'Mühendis', category: 'teknoloji' },
@@ -134,20 +135,20 @@ export function SearchHero({
               className="btn-primary flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
             >
               <Briefcase className="h-5 w-5" />
-              ÜCRETSİZ İLAN VER
+              Ücretsiz İlan Ver
             </Link>
             <Button
               onClick={() => window.location.href = '/cv-olustur'}
               className="btn-secondary flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
             >
               <FileText className="h-4 w-4" />
-              Ücretsiz CV Oluştur
+              CV Oluştur
             </Button>
           </div>
           
           {/* Trust Indicators */}
           <div className="mt-6 pt-4 border-t border-gray-200 text-center">
-            <p className="text-xs text-gray-600 mb-2 font-medium">🔒 Güvenilir ve Ücretsiz Platform</p>
+            <p className="text-xs text-gray-600 mb-2 font-medium">Güvenilir ve Ücretsiz Platform</p>
             <div className="flex justify-center items-center gap-4 text-xs text-gray-500">
               <span className="flex items-center gap-1">
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
