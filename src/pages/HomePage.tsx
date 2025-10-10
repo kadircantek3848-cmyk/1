@@ -49,60 +49,36 @@ export function HomePage() {
   } = useJobFilters(jobs);
 
   useEffect(() => {
-  // SEO meta tags
-generateMetaTags({
-  title: 'İş İlanları 2025 - İşBuldum Hızlı İş Bulma Platformu',
-  description: 'İşBuldum ile hızlı iş bulun! 6 Ocak 2025 itibarıyla 50.000+ aktif iş ilanı. İstanbul, Ankara, İzmir ve tüm şehirlerde güncel iş fırsatları. Hemen başvurun, kariyerinizi şekillendirin!',
-  keywords: [
-    'iş ilanları', 'güncel iş ilanları', 'iş fırsatları', 'eleman ilanları', 'kariyer', 'iş ilanları 2025',
-    'istanbul iş ilanları', 'ankara iş ilanları', 'izmir iş ilanları',
-    'mühendis iş ilanları', 'garson iş ilanları', 'kurye iş ilanları', 
-    'resepsiyon görevlisi iş ilanları', 'aşçı yardımcısı iş ilanları', 'özel güvenlik iş ilanları',
-    'yeni iş ilanları', 'part time iş ilanları', 'tam zamanlı iş ilanları',
-    'uzaktan çalışma iş ilanları', 'remote iş ilanları', 'freelance iş ilanları', 'home office iş ilanları',
-    'yeni mezun iş ilanları', 'deneyimsiz iş ilanları',
-    'iş ara', 'iş bul', 'kariyer fırsatları', 'iş başvurusu', 'cv oluştur', 'ücretsiz cv',
-    'özgeçmiş hazırlama', 'iş arama sitesi', 'eleman.net', 'kariyer.net', 'secretcv',
-    'yenibiris', 'sahibinden iş ilanları', 'işkur iş ilanları', 'online iş başvurusu',
-    // İstanbul iş ilanları
-    'istanbul\'da iş ilanları ve maaşları', 'istanbul\'da yatılı iş ilanları bay',
-    'dolgun maaşlı vasıfsız iş ilanları istanbul avrupa', '55-60 yaş iş ilanları istanbul avrupa yakası',
-    'sahibinden.com iş ilanları istanbul avrupa yakası', 'istanbul\'da yatılı iş ilanları bayan',
-    'istanbul\'da yatılı iş ilanları bayan sahibinden',
-    // Kocaeli İzmit iş ilanları
-    'kocaeli iş ilanları izmit', '50+55 yaş iş ilanları kocaeli',
-    'sahibinden iş ilanları izmit kocaeli', 'kocaeli iş ilanları facebook',
-    'kocaeli bayan iş ilanları işkur', '15-18 yaş arası iş ilanları kocaeli izmit',
-    'gölcük iş ilanları', 'kocaeli iş ilanları işkur', 'izmit iş ilanları',
-    // Bursa iş ilanları
-    'bursa iş ilanları lescard', '50-55 yaş iş ilanları bursa',
-    'bursa\'da günlük yevmiyeli iş', 'bursa fabrika iş ilanları vasıfsız',
-    'bursa nilüfer iş ilanları', '45 50 yaş arası iş ilanları bursa',
-    'sahibinden iş ilanları nilüfer bursa', '55-60 yaş iş ilanları bursa',
-    'bursa iş ilanları sahibinden',
-    // İzmir iş ilanları
-    'izmir\'deki fabrika iş ilanları', 'yeni asır iş ilanları bugün',
-    'izmir iş ilanları bayan', 'günlük peşin para iş izmir',
-    'izmir\'de yatılı iş ilanları bay sahibinden', '55-60 yaş iş ilanları izmir',
-    'yeni asır iş ilanları', 'ofis çay temizlik iş ilanları izmir',
-    'izmir otel iş ilanları', 'izmir iş ilanları bayan',
-    // Antalya iş ilanları
-    'antalya iş ilanları otel', '50+55 yaş iş ilanları antalya',
-    'antalya işkur\'dan iş ilanları', 'antalya iş ilanları lescard',
-    '12 ay açık otel iş ilanları serik antalya', 'antalya kepez işkur iş ilanları',
-    'antalya iş ilanları facebook', 'antalya yatılı iş ilanları sahibinden',
-    'antalya iş ilanları otel',
-    // Muğla Bodrum iş ilanları
-    'bodrum iş ilanları', 'muğla iş ilanları',
-    // Ankara iş ilanları
-    'ankara kızılay\'da iş ilanları bugün', 'ankara iş ilanları bayan',
-    '50+55 yaş iş ilanları ankara', 'ankara çankaya sahibinden iş ilanları',
-    'ankara iş ilanları lescard', 'sahibinden.com iş ilanları ankara',
-    '40 yaş bayan iş ilanları ankara', 'sahibinden iş ilanları yenimahalle ankara',
-    'ankara part time iş'
-  ],
-  url: window.location.pathname
-   });
+    // ✅ DÜZELTILMIŞ: SEO meta tags - Gerçekçi ve stratejik
+    const jobCount = jobs.length > 0 ? Math.ceil(jobs.length / 10) * 10 : 100; // Yuvarla: 94 -> 90, 125 -> 130
+    
+    generateMetaTags({
+      title: 'İstanbul Ankara İzmir İş İlanları | Şoför Garson Kasiyer',
+      description: `${jobCount}+ güncel iş ilanı. İstanbul şoför, Ankara garson, İzmir kasiyer pozisyonları. Ücretsiz başvuru, hızlı işe giriş.`,
+      keywords: [
+        // ✅ DÜŞÜK REKABET - Şehir + Pozisyon (P0 Öncelik)
+        'istanbul şoför iş ilanları', 'ankara garson iş ilanları', 'izmir kasiyer iş ilanları',
+        'istanbul transfer şoförü', 'ankara restoran elemanı', 'izmir market kasiyer',
+        'kadıköy garson ilanları', 'çankaya iş ilanları', 'konak iş fırsatları',
+        'beşiktaş kurye iş', 'keçiören çağrı merkezi', 'bornova part time',
+        
+        // ✅ ORTA REKABET - Kategori odaklı
+        'şoför iş ilanları 2025', 'garson iş ilanları güncel', 'kasiyer iş başvurusu',
+        'kurye iş ilanları', 'çağrı merkezi elemanı', 'satış danışmanı ilanları',
+        'restoran personeli aranıyor', 'market çalışanı iş', 'otel personeli',
+        
+        // ✅ UZUN KUYRUK - Spesifik aramalar
+        'istanbul avrupa yakası şoför', 'ankara yenimahalle iş ilanları', 
+        'izmir alsancak garson', 'kendi aracıyla şoför işi', 'part time garson',
+        'tam zamanlı kasiyer istanbul', 'esnek çalışma saatleri iş',
+        
+        // Genel terimler (düşük öncelik)
+        'iş ilanları', 'iş ara', 'iş bul', 'güncel iş ilanları',
+        'istanbul iş ilanları', 'ankara iş ilanları', 'izmir iş ilanları',
+        'iş başvurusu', 'eleman ilanları', 'kariyer fırsatları'
+      ],
+      url: window.location.pathname
+    });
 
     // Add structured data for homepage job listings
     const jobListSchema = {
@@ -121,13 +97,25 @@ generateMetaTags({
           "description": job.description.substring(0, 100) + "...",
           "hiringOrganization": {
             "@type": "Organization",
-            "name": job.company
+            "name": job.company || "İşveren"
           },
           "jobLocation": job.location,
           "url": `https://isilanlarim.org${generateJobUrl(job)}`
         }
       }))
     };
+
+    // Add schema to page
+    const existingSchema = document.getElementById('job-list-schema');
+    if (existingSchema) {
+      existingSchema.textContent = JSON.stringify(jobListSchema);
+    } else {
+      const script = document.createElement('script');
+      script.id = 'job-list-schema';
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify(jobListSchema);
+      document.head.appendChild(script);
+    }
 
     // Toast notifications
     if (location.state?.newJobCreated) {
@@ -165,7 +153,7 @@ generateMetaTags({
     if (jobs.length > 0) {
       checkJobDates(jobs);
     }
-  }, [pageNumber, location.state, jobs]);
+  }, [pageNumber, location.state, jobs, filteredJobs]);
 
   const getCategoryName = (categoryId: string) => {
     const category = jobCategories.find(c => c.id === categoryId);
@@ -184,11 +172,9 @@ generateMetaTags({
 
   const toggleMobileFilters = () => {
     setShowMobileFilters(!showMobileFilters);
-    // Prevent body scroll when filters are open
     document.body.style.overflow = !showMobileFilters ? 'hidden' : 'auto';
   };
 
-  // Close mobile filters when clicking outside
   useEffect(() => {
     return () => {
       document.body.style.overflow = 'auto';
@@ -212,7 +198,6 @@ generateMetaTags({
       <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
-            {/* Compact Search Input */}
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
@@ -224,7 +209,6 @@ generateMetaTags({
               />
             </div>
 
-            {/* Mobile Filter Button */}
             <button
               onClick={toggleMobileFilters}
               className="lg:hidden flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
@@ -238,7 +222,6 @@ generateMetaTags({
               )}
             </button>
 
-            {/* Results Count */}
             <div className="hidden sm:flex items-center text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded-lg">
               <Briefcase className="w-4 h-4 mr-1" />
               {filteredJobs.length} ilan
@@ -282,10 +265,8 @@ generateMetaTags({
 
         {/* Desktop Layout */}
         <div className="hidden lg:grid lg:grid-cols-12 gap-8">
-          {/* Desktop Sidebar */}
           <div className="lg:col-span-3">
             <div className="sticky top-20 space-y-6">
-              {/* Stats Card */}
               <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-gray-900">İstatistikler</h3>
@@ -311,18 +292,9 @@ generateMetaTags({
                     <span className="text-sm text-gray-600">Kategori</span>
                     <span className="font-semibold text-purple-600">{categories.length}</span>
                   </div>
-                  {isShowingSimilar && filters.city && (
-                    <div className="pt-2 border-t border-gray-200">
-                      <div className="text-xs text-yellow-600 flex items-center gap-1">
-                        <AlertCircle className="h-3 w-3" />
-                        {filters.city} benzeri gösteriliyor
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
 
-              {/* Filters */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-200">
                 <JobFilters
                   filters={filters}
@@ -335,7 +307,6 @@ generateMetaTags({
             </div>
           </div>
 
-          {/* Desktop Main Content */}
           <div className="lg:col-span-9">
             <MainContent 
               loading={loading}
@@ -374,13 +345,11 @@ generateMetaTags({
       {/* Mobile Filter Drawer */}
       {showMobileFilters && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Backdrop */}
           <div 
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={toggleMobileFilters}
           />
           
-          {/* Drawer */}
           <div className="absolute inset-y-0 right-0 w-full max-w-sm bg-white shadow-xl">
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">Filtreler</h3>
@@ -411,7 +380,7 @@ generateMetaTags({
         </div>
       )}
 
-      {/* SEO Content */}
+      {/* ✅ SEO Content - Bu kısım Google için kritik */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <SEOJobContent />
       </div>
@@ -419,7 +388,7 @@ generateMetaTags({
   );
 }
 
-// Main Content Component
+// Main Content Component (değişiklik yok)
 const MainContent: React.FC<{
   loading: boolean;
   error: string | null;
@@ -445,7 +414,6 @@ const MainContent: React.FC<{
   isShowingSimilar,
   onClearFilters
 }) => {
-  // Loading State
   if (loading && filteredJobs.length === 0) {
     return (
       <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
@@ -458,7 +426,6 @@ const MainContent: React.FC<{
     );
   }
 
-  // Error State
   if (error) {
     return (
       <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
@@ -477,7 +444,6 @@ const MainContent: React.FC<{
     );
   }
 
-  // Empty State
   if (filteredJobs.length === 0) {
     return (
       <div className="bg-white rounded-xl p-12 shadow-sm border border-gray-200 text-center">
@@ -506,10 +472,8 @@ const MainContent: React.FC<{
     );
   }
 
-  // Job List
   return (
     <div className="space-y-6">
-      {/* Desktop Header */}
       <div className="hidden lg:block">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -521,7 +485,6 @@ const MainContent: React.FC<{
         </div>
       </div>
 
-      {/* Job List */}
       <JobList 
         jobs={filteredJobs} 
         onJobDeleted={refetchJobs}
