@@ -120,7 +120,6 @@ export function JobDetailsPage() {
       }
 
       // Strategi 2: Son çare - tüm aktif ilanları çek (limit ile)
-      // NOT: Bu hala optimum değil, idealde slug->ID mapping olmalı
       const jobsRef = ref(db, 'jobs');
       const snapshot = await get(jobsRef);
       
@@ -133,9 +132,7 @@ export function JobDetailsPage() {
           // Status kontrolünü esnetleyelim - farklı status değerlerini kabul et
           if (job.status === 'active' || job.status === 'approved' || job.status === 'published' || !job.status) {
             const jobSlug = generateSlug(job.title);
-            console.log('🔍 Comparing slugs:', { jobSlug, requestedSlug: slug });
             if (jobSlug === slug) {
-              console.log('✅ Found matching job:', job.title);
               return { id: jobId, ...job } as JobListing;
             }
           }
@@ -172,7 +169,7 @@ export function JobDetailsPage() {
         'iş fırsatları',
         'eleman ilanları',
         `${job.location.toLowerCase()} eleman ilanları`,
-        `${job.category} iş ilanları ${job.location.toLowerCase()}`, // ✅ VİRGÜL EKLENDİ
+        `${job.category} iş ilanları ${job.location.toLowerCase()}`,
         `${job.location.toLowerCase()} iş ara`,
         `${job.category} iş ilanları`
       ],
@@ -181,18 +178,33 @@ export function JobDetailsPage() {
     });
   };
 
+  // ✅ SCROLL POZİSYONU DÜZELTİLMİŞ handleClose
   const handleClose = () => {
-    // Scroll pozisyonunu geri yükle
     const previousPath = sessionStorage.getItem('previousPath') || '/';
     const scrollPosition = sessionStorage.getItem('scrollPosition');
     
+    // Önce navigate et
     navigate(previousPath, { 
       replace: true,
       state: { 
-        scrollToPosition: scrollPosition,
-        fromJobDetail: true
+        restoreScroll: true // Bu flag HomePage'e scroll restore için sinyal verir
       }
     });
+    
+    // Navigate sonrası scroll pozisyonunu geri yükle
+    if (scrollPosition) {
+      // requestAnimationFrame kullanarak DOM render olduktan sonra scroll yap
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          const position = parseInt(scrollPosition, 10);
+          window.scrollTo({
+            top: position,
+            behavior: 'instant' // Anında scroll, smooth değil
+          });
+          console.log('📍 Scroll restored to:', position);
+        }, 50); // Küçük delay - DOM'un render olması için
+      });
+    }
   };
 
   // Loading state'i daha hızlı göster
@@ -218,7 +230,12 @@ export function JobDetailsPage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-2">İlan Bulunamadı</h2>
           <p className="text-gray-600 mb-4">{error || 'Bu ilan artık mevcut değil'}</p>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => {
+              // Ana sayfaya dönerken scroll pozisyonunu temizle
+              sessionStorage.removeItem('scrollPosition');
+              sessionStorage.removeItem('previousPath');
+              navigate('/');
+            }}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Ana Sayfaya Dön
