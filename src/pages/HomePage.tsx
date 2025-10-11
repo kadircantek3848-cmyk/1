@@ -36,7 +36,7 @@ export function HomePage() {
   } = useJobs({
     categoryFilter: undefined, 
     searchTerm, 
-    limit: 20 // Sayfa başına 20 ilan
+    limit: 20
   });
 
   const { 
@@ -49,30 +49,22 @@ export function HomePage() {
   } = useJobFilters(jobs);
 
   useEffect(() => {
-    // ✅ DÜZELTILMIŞ: SEO meta tags - Gerçekçi ve stratejik
-    const jobCount = jobs.length > 0 ? Math.ceil(jobs.length / 10) * 10 : 100; // Yuvarla: 94 -> 90, 125 -> 130
+    const jobCount = jobs.length > 0 ? Math.ceil(jobs.length / 10) * 10 : 100;
     
     generateMetaTags({
       title: 'İstanbul Ankara İzmir İş İlanları | Şoför Garson Kasiyer',
       description: `${jobCount}+ güncel iş ilanı. İstanbul şoför, Ankara garson, İzmir kasiyer pozisyonları. Ücretsiz başvuru, hızlı işe giriş.`,
       keywords: [
-        // ✅ DÜŞÜK REKABET - Şehir + Pozisyon (P0 Öncelik)
         'istanbul şoför iş ilanları', 'ankara garson iş ilanları', 'izmir kasiyer iş ilanları',
         'istanbul transfer şoförü', 'ankara restoran elemanı', 'izmir market kasiyer',
         'kadıköy garson ilanları', 'çankaya iş ilanları', 'konak iş fırsatları',
         'beşiktaş kurye iş', 'keçiören çağrı merkezi', 'bornova part time',
-        
-        // ✅ ORTA REKABET - Kategori odaklı
         'şoför iş ilanları 2025', 'garson iş ilanları güncel', 'kasiyer iş başvurusu',
         'kurye iş ilanları', 'çağrı merkezi elemanı', 'satış danışmanı ilanları',
         'restoran personeli aranıyor', 'market çalışanı iş', 'otel personeli',
-        
-        // ✅ UZUN KUYRUK - Spesifik aramalar
         'istanbul avrupa yakası şoför', 'ankara yenimahalle iş ilanları', 
         'izmir alsancak garson', 'kendi aracıyla şoför işi', 'part time garson',
         'tam zamanlı kasiyer istanbul', 'esnek çalışma saatleri iş',
-        
-        // Genel terimler (düşük öncelik)
         'iş ilanları', 'iş ara', 'iş bul', 'güncel iş ilanları',
         'istanbul iş ilanları', 'ankara iş ilanları', 'izmir iş ilanları',
         'iş başvurusu', 'eleman ilanları', 'kariyer fırsatları'
@@ -80,7 +72,6 @@ export function HomePage() {
       url: window.location.pathname
     });
 
-    // Add structured data for homepage job listings
     const jobListSchema = {
       "@context": "https://schema.org",
       "@type": "ItemList",
@@ -105,7 +96,6 @@ export function HomePage() {
       }))
     };
 
-    // Add schema to page
     const existingSchema = document.getElementById('job-list-schema');
     if (existingSchema) {
       existingSchema.textContent = JSON.stringify(jobListSchema);
@@ -117,7 +107,6 @@ export function HomePage() {
       document.head.appendChild(script);
     }
 
-    // Toast notifications
     if (location.state?.newJobCreated) {
       toast.success('🎉 İlanınız başarıyla yayınlandı ve en üstte görünüyor!', {
         duration: 4000,
@@ -136,7 +125,6 @@ export function HomePage() {
       window.history.replaceState({}, document.title);
     }
 
-    // Scroll position restore
     const scrollPosition = sessionStorage.getItem('scrollPosition');
     const previousPath = sessionStorage.getItem('previousPath');
     
@@ -155,28 +143,23 @@ export function HomePage() {
     }
   }, [pageNumber, location.state, jobs, filteredJobs]);
 
-  // ✅ YENİ: İlan detayından geri dönüldüğünde scroll pozisyonunu geri yükle
   useEffect(() => {
     if (location.state?.restoreScroll) {
       const scrollPosition = sessionStorage.getItem('scrollPosition');
       
       if (scrollPosition) {
-        // DOM render olduktan sonra scroll yap
         const timeoutId = setTimeout(() => {
           const position = parseInt(scrollPosition, 10);
           window.scrollTo({
             top: position,
-            behavior: 'instant' // Anında scroll, smooth değil
+            behavior: 'instant'
           });
           console.log('📍 HomePage scroll restored to:', position);
           
-          // Temizle
           sessionStorage.removeItem('scrollPosition');
           sessionStorage.removeItem('previousPath');
-          
-          // State'i temizle
           window.history.replaceState({}, document.title);
-        }, 150); // Biraz daha uzun bekleme süresi - DOM render için
+        }, 150);
         
         return () => clearTimeout(timeoutId);
       }
@@ -203,6 +186,14 @@ export function HomePage() {
     document.body.style.overflow = !showMobileFilters ? 'hidden' : 'auto';
   };
 
+  const handleSearchChange = (term: string) => {
+    setSearchTerm(term);
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm('');
+  };
+
   useEffect(() => {
     return () => {
       document.body.style.overflow = 'auto';
@@ -211,10 +202,10 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Full Search Hero - Only on top */}
+      {/* Full Search Hero */}
       <div className="bg-white">
         <SearchHero
-          onSearch={setSearchTerm}
+          onSearch={handleSearchChange}
           onLocationChange={(city) => updateFilters({ city })}
           onCategorySelect={(category) => updateFilters({ category, subCategory: '' })}
           availableCategories={categories}
@@ -232,9 +223,17 @@ export function HomePage() {
                 type="text"
                 placeholder="İş ara... (Örn: Yazılım Geliştirici, Satış Temsilci)"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="w-full pl-10 pr-10 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+              {searchTerm && (
+                <button
+                  onClick={handleClearSearch}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
             </div>
 
             <button
@@ -262,7 +261,7 @@ export function HomePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Mobile Header - Only Stats */}
+        {/* Mobile Header */}
         <div className="lg:hidden mb-6">
           <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
@@ -408,7 +407,7 @@ export function HomePage() {
         </div>
       )}
 
-      {/* ✅ SEO Content - Bu kısım Google için kritik */}
+      {/* SEO Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <SEOJobContent />
       </div>
@@ -416,7 +415,7 @@ export function HomePage() {
   );
 }
 
-// Main Content Component (değişiklik yok)
+// Main Content Component
 const MainContent: React.FC<{
   loading: boolean;
   error: string | null;
@@ -521,4 +520,8 @@ const MainContent: React.FC<{
         loadingMore={loadingMore}
         isShowingSimilar={isShowingSimilar}
         selectedCity={filters.city}
-        onClear
+        onClearFilters={onClearFilters}
+      />
+    </div>
+  );
+};
