@@ -155,6 +155,34 @@ export function HomePage() {
     }
   }, [pageNumber, location.state, jobs, filteredJobs]);
 
+  // ✅ YENİ: İlan detayından geri dönüldüğünde scroll pozisyonunu geri yükle
+  useEffect(() => {
+    if (location.state?.restoreScroll) {
+      const scrollPosition = sessionStorage.getItem('scrollPosition');
+      
+      if (scrollPosition) {
+        // DOM render olduktan sonra scroll yap
+        const timeoutId = setTimeout(() => {
+          const position = parseInt(scrollPosition, 10);
+          window.scrollTo({
+            top: position,
+            behavior: 'instant' // Anında scroll, smooth değil
+          });
+          console.log('📍 HomePage scroll restored to:', position);
+          
+          // Temizle
+          sessionStorage.removeItem('scrollPosition');
+          sessionStorage.removeItem('previousPath');
+          
+          // State'i temizle
+          window.history.replaceState({}, document.title);
+        }, 150); // Biraz daha uzun bekleme süresi - DOM render için
+        
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, [location.state?.restoreScroll]);
+
   const getCategoryName = (categoryId: string) => {
     const category = jobCategories.find(c => c.id === categoryId);
     return category ? `${category.name} İlanları` : 'Tüm İlanlar';
@@ -493,8 +521,4 @@ const MainContent: React.FC<{
         loadingMore={loadingMore}
         isShowingSimilar={isShowingSimilar}
         selectedCity={filters.city}
-        onClearFilters={onClearFilters}
-      />
-    </div>
-  );
-};
+        onClear
