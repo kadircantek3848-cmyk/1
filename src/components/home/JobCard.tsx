@@ -181,7 +181,7 @@ export function JobCard({ job, onDeleted }: JobCardProps) {
                 </span>
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold whitespace-nowrap">
                   <Star className="h-3 w-3" />
-                  SGK + PRİM
+                
                 </span>
               </div>
             </div>
