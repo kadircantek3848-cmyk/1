@@ -18,14 +18,29 @@ Disallow: /node_modules/
 Disallow: /odeme/
 Disallow: /favoriler
 
-# Duplicate content engelleme ve parametreleri engelleme
-Disallow: /*?*
-Disallow: /*#*
-Disallow: /search?*
-Disallow: /filter?*
-Disallow: /*utm_*
-Disallow: /*ref=*
-Disallow: /*source=*
+# ÖNEMLİ: Sadece tracking parametrelerini engelle, tüm query parametrelerini değil!
+# Disallow: /*?* <- BU SATIRLARI KALDIRDIK! İş ilanları için gerekli
+# Disallow: /*#* <- BU SATIRLARI KALDIRDIK! İş ilanları için gerekli
+
+# Sadece tracking/analytics parametrelerini engelle
+Disallow: /*?utm_source=*
+Disallow: /*?utm_medium=*
+Disallow: /*?utm_campaign=*
+Disallow: /*?utm_term=*
+Disallow: /*?utm_content=*
+Disallow: /*&utm_source=*
+Disallow: /*&utm_medium=*
+Disallow: /*&utm_campaign=*
+Disallow: /*&utm_term=*
+Disallow: /*&utm_content=*
+Disallow: /*?ref=*
+Disallow: /*&ref=*
+Disallow: /*?source=*
+Disallow: /*&source=*
+Disallow: /*?fbclid=*
+Disallow: /*&fbclid=*
+Disallow: /*?gclid=*
+Disallow: /*&gclid=*
 
 # Google AdSense Crawler
 User-agent: Mediapartners-Google
@@ -35,20 +50,17 @@ Allow: /
 User-agent: Google-Display-Ads-Bot
 Allow: /
 
-# Googlebot için özel ayarlar (Crawl-delay tavsiye edilmez, ancak korundu)
+# Googlebot için özel ayarlar (Crawl-delay KALDIRILDI - artık önerilmiyor)
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 0.5
 
-# Bingbot için özel ayarlar (Crawl-delay tavsiye edilmez, ancak korundu)
+# Bingbot için özel ayarlar (Crawl-delay KALDIRILDI - artık önerilmiyor)
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 0.5
 
-# Yandex Bot
+# Yandex Bot (Crawl-delay KALDIRILDI - artık önerilmiyor)
 User-agent: YandexBot
 Allow: /
-Crawl-delay: 0.5
 
 # Diğer botlar
 User-agent: DuckDuckBot
@@ -63,10 +75,5 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-# Site Haritası Konumları - Taranması gereken tüm haritalar
+# Site Haritası Konumları - SIRALI VE DÜZENLİ
 Sitemap: https://isilanlarim.org/sitemap.xml
-Sitemap: https://isilanlarim.org/sitemap-jobs.xml
-Sitemap: https://isilanlarim.org/sitemap-static.xml
-Sitemap: https://isilanlarim.org/sitemap-pages.xml
-Sitemap: https://isilanlarim.org/sitemap-categories.xml
-Sitemap: https://isilanlarim.org/sitemap-cities.xml
