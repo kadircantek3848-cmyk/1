@@ -5,89 +5,89 @@
     <loc>https://isilanlarim.org/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
 
-  <!-- Popüler Arama Sayfaları -->
+  <!-- Popüler Şehir Sayfaları - En Yüksek Öncelik -->
   <url>
     <loc>https://isilanlarim.org/istanbul-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/ankara-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/izmir-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
 
-  <!-- Yeni Eklenen Şehirler -->
+  <!-- Büyük Şehirler -->
   <url>
     <loc>https://isilanlarim.org/bursa-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/antalya-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/adana-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/konya-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/gaziantep-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/mersin-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/kayseri-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/eskisehir-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/samsun-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/trabzon-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
 
   <!-- Popüler Meslek Sayfaları -->
@@ -95,37 +95,37 @@
     <loc>https://isilanlarim.org/muhendis-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/garson-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/kurye-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/resepsiyon-gorevlisi-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/asci-yardimcisi-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/ozel-guvenlik-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
 
   <!-- CV Oluşturma -->
@@ -133,7 +133,7 @@
     <loc>https://isilanlarim.org/cv-olustur</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
 
   <!-- Blog ve Rehber Sayfaları -->
@@ -141,43 +141,43 @@
     <loc>https://isilanlarim.org/blog</loc>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
-    <lastmod>2025-01-06T23:30:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/kariyer-rehberi</loc>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
-    <lastmod>2025-01-06T23:30:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-arama-rehberi</loc>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
-    <lastmod>2025-01-06T23:30:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/mulakat-rehberi</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T23:30:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/cv-hazırlama-rehberi</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T23:30:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/uzaktan-calisma-rehberi</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T23:30:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/sektor-analizi</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T23:30:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
 
   <!-- Çalışma Şekli Sayfaları -->
@@ -185,37 +185,37 @@
     <loc>https://isilanlarim.org/part-time-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/remote-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/freelance-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/yeni-mezun-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/deneyimsiz-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/staj-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
 
   <!-- Özel Sayfalar -->
@@ -223,185 +223,135 @@
     <loc>https://isilanlarim.org/yeni-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/guncel-is-ilanlari</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
 
-  <!-- Şehir Bazlı -->
-  <url>
-    <loc>https://isilanlarim.org/istanbul-is-ilanlari</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://isilanlarim.org/ankara-is-ilanlari</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
-  </url>
-  <url>
-    <loc>https://isilanlarim.org/izmir-is-ilanlari</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://isilanlarim.org/bursa-is-ilanlari</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
-  </url>
-  <url>
-    <loc>https://isilanlarim.org/antalya-is-ilanlari</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://isilanlarim.org/adana-is-ilanlari</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
-  </url>
-  <url>
-    <loc>https://isilanlarim.org/konya-is-ilanlari</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://isilanlarim.org/gaziantep-is-ilanlari</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
-  </url>
-
-  <!-- Kategori Bazlı -->
+  <!-- Ana Kategori Sayfaları -->
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/teknoloji</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/finans</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/egitim</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/saglik</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/insaat</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/hizmet</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/sanayi</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/ticaret</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/lojistik</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/medya</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/tarim</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/turizm</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/guvenlik</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/enerji</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/perakende</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/kamu</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/yonetim</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/havacilik</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/denizcilik</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://isilanlarim.org/is-ilanlari/sanat</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2025-01-06T21:03:36.787Z</lastmod>
+    <priority>0.9</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
 
   <!-- Gizlilik ve Yasal -->
@@ -409,6 +359,24 @@
     <loc>https://isilanlarim.org/gizlilik-politikasi</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
-    <lastmod>2025-01-06T22:31:00.000Z</lastmod>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://isilanlarim.org/kullanim-kosullari</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://isilanlarim.org/hakkimizda</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://isilanlarim.org/iletisim</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
   </url>
 </urlset>
