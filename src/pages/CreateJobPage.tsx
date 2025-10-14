@@ -15,6 +15,14 @@ export function CreateJobPage() {
   const handleSubmit = async (data: JobFormData) => {
     const success = await createJob(data);
     if (success) {
+      // ✅ YENI: Google'a sitemap güncellemesini bildir (arka planda, non-blocking)
+      fetch('/.netlify/functions/ping-sitemap', { 
+        method: 'POST' 
+      }).catch(err => {
+        // Hata olsa bile devam et - kritik değil
+        console.log('Sitemap ping (non-critical):', err);
+      });
+      
       // ✅ İlan başarıyla oluşturulduktan sonra ana sayfaya yönlendir
       // Kullanıcı kendi ilanını en üstte görebilsin
       setTimeout(() => {
