@@ -12,7 +12,8 @@ const jobCache = new Map<string, { job: JobListing; timestamp: number }>();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export function JobDetailsPage() {
-  const { slug } = useParams<{ slug: string }>();
+  // ✅ DÜZELTME: Artık hem id hem slug alıyoruz
+  const { id, slug } = useParams<{ id: string; slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const [job, setJob] = useState<JobListing | null>(null);
@@ -33,44 +34,61 @@ export function JobDetailsPage() {
     
     const fetchJob = async () => {
       try {
-        if (!slug) {
+        // ✅ DÜZELTME: ID kontrolü
+        if (!id || !slug) {
           setError('Geçersiz ilan URL\'si');
           setLoading(false);
           return;
         }
 
         // 1. ÖNCE: Eğer job data router state'den geliyorsa onu kullan
-        if (passedJobData && generateSlug(passedJobData.title) === slug) {
+        if (passedJobData && passedJobData.id === id) {
           setJob(passedJobData);
           updateMetaTags(passedJobData);
           setLoading(false);
           
-          // Cache'e de ekle
-          jobCache.set(slug, {
+          // ✅ DÜZELTME: Cache key artık ID
+          jobCache.set(id, {
             job: passedJobData,
             timestamp: Date.now()
           });
           return;
         }
 
-        // 2. CACHE KONTROL: Önce cache'den bak
-        const cachedJob = getCachedJob(slug);
+        // 2. CACHE KONTROL: Önce cache'den bak (ID ile)
+        const cachedJob = getCachedJob(id);
         if (cachedJob) {
+          // ✅ Slug doğrulaması - Yanlış slug varsa doğru URL'e yönlendir
+          const correctSlug = generateSlug(cachedJob.title);
+          if (slug !== correctSlug) {
+            console.log('🔄 Redirecting to correct slug:', correctSlug);
+            navigate(`/ilan/${id}/${correctSlug}`, { replace: true });
+            return;
+          }
+          
           setJob(cachedJob);
           updateMetaTags(cachedJob);
           setLoading(false);
           return;
         }
 
-        // 3. FIREBASE'DEN ÇEK: Son çare olarak Firebase'den çek
-        const foundJob = await fetchJobFromFirebase(slug);
+        // 3. FIREBASE'DEN ÇEK: ID ile direkt erişim (ÇOK HIZLI! 🚀)
+        const foundJob = await fetchJobFromFirebase(id);
         
         if (foundJob) {
+          // ✅ Slug doğrulaması
+          const correctSlug = generateSlug(foundJob.title);
+          if (slug !== correctSlug) {
+            console.log('🔄 Redirecting to correct slug:', correctSlug);
+            navigate(`/ilan/${id}/${correctSlug}`, { replace: true });
+            return;
+          }
+          
           setJob(foundJob);
           updateMetaTags(foundJob);
           
-          // Cache'e kaydet
-          jobCache.set(slug, {
+          // ✅ DÜZELTME: Cache'e kaydet (ID ile)
+          jobCache.set(id, {
             job: foundJob,
             timestamp: Date.now()
           });
@@ -86,60 +104,42 @@ export function JobDetailsPage() {
     };
 
     fetchJob();
-  }, [slug, passedJobData, isModalView]);
+  }, [id, slug, passedJobData, isModalView, navigate]);
 
-  // Cache'den job getir
-  const getCachedJob = (slug: string): JobListing | null => {
-    const cached = jobCache.get(slug);
+  // ✅ DÜZELTME: Cache artık ID bazlı
+  const getCachedJob = (jobId: string): JobListing | null => {
+    const cached = jobCache.get(jobId);
     if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
-      console.log('🎯 Job loaded from cache:', slug);
+      console.log('🎯 Job loaded from cache:', jobId);
       return cached.job;
     }
     return null;
   };
 
-  // Firebase'den optimized job fetch
-  const fetchJobFromFirebase = async (slug: string): Promise<JobListing | null> => {
-    console.log('🔥 Fetching job from Firebase:', slug);
+  // ✅ DÜZELTME: Firebase'den direkt ID ile fetch (ÇOK HIZLI!)
+  const fetchJobFromFirebase = async (jobId: string): Promise<JobListing | null> => {
+    console.log('🔥 Fetching job from Firebase (by ID):', jobId);
     
     try {
-      // Strategi 1: Job ID'si URL'de varsa (örn: /jobs/job-title-JOB123)
-      const jobIdMatch = slug.match(/-([A-Za-z0-9-_]{10,})$/);
-      if (jobIdMatch) {
-        const jobId = jobIdMatch[1];
-        const directJobRef = ref(db, `jobs/${jobId}`);
-        const directSnapshot = await get(directJobRef);
-        
-        if (directSnapshot.exists()) {
-          const jobData = directSnapshot.val();
-          // Status kontrolünü esnetleyelim - farklı status değerlerini kabul et
-          if (jobData.status === 'active' || jobData.status === 'approved' || jobData.status === 'published' || !jobData.status) {
-            return { id: jobId, ...jobData } as JobListing;
-          }
-        }
-      }
-
-      // Strategi 2: Son çare - tüm aktif ilanları çek (limit ile)
-      const jobsRef = ref(db, 'jobs');
-      const snapshot = await get(jobsRef);
+      // ✅ Direkt ID ile erişim - En hızlı yöntem!
+      const directJobRef = ref(db, `jobs/${jobId}`);
+      const snapshot = await get(directJobRef);
       
       if (snapshot.exists()) {
-        const allJobs = snapshot.val();
+        const jobData = snapshot.val();
         
-        // Sadece aktif ilanları kontrol et
-        for (const [jobId, jobData] of Object.entries(allJobs)) {
-          const job = jobData as any;
-          // Status kontrolünü esnetleyelim - farklı status değerlerini kabul et
-          if (job.status === 'active' || job.status === 'approved' || job.status === 'published' || !job.status) {
-            const jobSlug = generateSlug(job.title);
-            if (jobSlug === slug) {
-              return { id: jobId, ...job } as JobListing;
-            }
-          }
+        // Status kontrolü - aktif ilanları kabul et
+        if (jobData.status === 'active' || jobData.status === 'approved' || jobData.status === 'published' || !jobData.status) {
+          console.log('✅ Job found:', jobData.title);
+          return { id: jobId, ...jobData } as JobListing;
+        } else {
+          console.warn('⚠️ Job found but not active:', jobData.status);
         }
+      } else {
+        console.warn('⚠️ Job not found in Firebase:', jobId);
       }
     } catch (error) {
-      console.error('Firebase fetch error:', error);
+      console.error('❌ Firebase fetch error:', error);
     }
     
     return null;
