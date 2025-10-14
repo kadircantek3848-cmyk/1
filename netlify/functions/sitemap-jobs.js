@@ -2,14 +2,16 @@ const { ref, get } = require('firebase/database');
 const { initializeApp } = require('firebase/app');
 const { getDatabase } = require('firebase/database');
 
+// ÖNEMLİ: Bu bilgileri environment variable olarak kullanın!
+// Netlify dashboard > Site settings > Environment variables
 const firebaseConfig = {
-  apiKey: "AIzaSyAUmnb0K1M6-U8uzSsYVpTxAAdXdU8I--o",
-  authDomain: "btc3-d7d9b.firebaseapp.com",
-  databaseURL: "https://btc3-d7d9b-default-rtdb.firebaseio.com",
-  projectId: "btc3-d7d9b",
-  storageBucket: "btc3-d7d9b.firebasestorage.app",
-  messagingSenderId: "444798129246",
-  appId: "1:444798129246:web:b5c9c03ab05c4303e310cf"
+  apiKey: process.env.FIREBASE_API_KEY || "AIzaSyAUmnb0K1M6-U8uzSsYVpTxAAdXdU8I--o",
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN || "btc3-d7d9b.firebaseapp.com",
+  databaseURL: process.env.FIREBASE_DATABASE_URL || "https://btc3-d7d9b-default-rtdb.firebaseio.com",
+  projectId: process.env.FIREBASE_PROJECT_ID || "btc3-d7d9b",
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "btc3-d7d9b.firebasestorage.app",
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "444798129246",
+  appId: process.env.FIREBASE_APP_ID || "1:444798129246:web:b5c9c03ab05c4303e310cf"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -29,6 +31,7 @@ function generateSlug(text) {
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '')
     .trim();
 }
 
@@ -54,17 +57,43 @@ function parseTimestamp(timestamp) {
   return new Date(timestamp);
 }
 
+function escapeXml(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+// Priority hesaplama - Yeni ilanlar daha yüksek öncelikli
+function calculatePriority(createdAt) {
+  const now = Date.now();
+  const daysSinceCreation = (now - createdAt) / (1000 * 60 * 60 * 24);
+  
+  if (daysSinceCreation < 1) return '1.0';      // Bugünkü ilanlar
+  if (daysSinceCreation < 3) return '0.95';     // 3 günden yeni
+  if (daysSinceCreation < 7) return '0.9';      // Haftalık
+  if (daysSinceCreation < 14) return '0.85';    // 2 haftalık
+  if (daysSinceCreation < 30) return '0.8';     // Aylık
+  return '0.7';                                  // Eski ilanlar
+}
+
 exports.handler = async (event, context) => {
+  const startTime = Date.now();
+  
   try {
-    console.log('Sitemap jobs generation started...');
+    console.log('🚀 Sitemap jobs generation started...');
     
     const jobsRef = ref(db, 'jobs');
     const snapshot = await get(jobsRef);
 
     const urls = [];
-    const SITE_URL = 'https://isilanlarim.org';
+    const SITE_URL = process.env.SITE_URL || 'https://isilanlarim.org';
     let totalJobs = 0;
     let activeJobs = 0;
+    let errorCount = 0;
 
     if (snapshot.exists()) {
       const allJobs = [];
@@ -96,7 +125,7 @@ exports.handler = async (event, context) => {
         }
       });
 
-      console.log(`Total jobs found: ${totalJobs}, Active jobs: ${activeJobs}`);
+      console.log(`📊 Total jobs: ${totalJobs}, Active jobs: ${activeJobs}`);
 
       // İlanları tarihe göre sırala (yeni olanlar önce)
       allJobs.sort((a, b) => {
@@ -111,91 +140,92 @@ exports.handler = async (event, context) => {
           const slug = generateSlug(job.title);
           const lastmodDate = parseTimestamp(job.updatedAt || job.createdAt);
           const lastmod = lastmodDate.toISOString();
+          const priority = calculatePriority(job.createdAt);
 
-          // URL'yi oluştur
-          const jobUrl = `${SITE_URL}/ilan/${slug}`;
+          // KRİTİK FİX: Job ID'yi URL'e ekledik!
+          // JobCard.tsx ile uyumlu URL formatı
+          const jobUrl = `${SITE_URL}/ilan/${job.id}/${slug}`;
           
           urls.push(`
     <url>
-      <loc>${jobUrl}</loc>
+      <loc>${escapeXml(jobUrl)}</loc>
       <lastmod>${lastmod}</lastmod>
       <changefreq>daily</changefreq>
-      <priority>0.9</priority>
+      <priority>${priority}</priority>
     </url>`);
 
-          // İlk 10 ilanı logla
-          if (index < 10) {
-            console.log(`Job ${index + 1}: ${job.title} - ${jobUrl}`);
+          // İlk 5 ve son 5 ilanı logla
+          if (index < 5 || index >= allJobs.length - 5) {
+            console.log(`✅ Job ${index + 1}/${allJobs.length}: ${job.title} - Priority: ${priority}`);
           }
         } catch (error) {
-          console.error(`Error processing job ${job.id}:`, error);
+          errorCount++;
+          console.error(`❌ Error processing job ${job.id}:`, error.message);
         }
       });
+    } else {
+      console.warn('⚠️ No jobs found in database');
     }
 
-    console.log(`Generated ${urls.length} URLs for sitemap`);
+    const generationTime = Date.now() - startTime;
+    console.log(`✅ Generated ${urls.length} URLs in ${generationTime}ms`);
+    if (errorCount > 0) {
+      console.warn(`⚠️ ${errorCount} errors occurred during generation`);
+    }
 
     // Sitemap XML'ini oluştur
+    const now = new Date().toISOString();
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Generated on ${new Date().toISOString()} -->
-  <!-- Total active jobs: ${activeJobs} -->
-  ${urls.join('')}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <!-- 
+    Dinamik İş İlanları Sitemap
+    Generated: ${now}
+    Total Jobs: ${totalJobs}
+    Active Jobs: ${activeJobs}
+    URLs Generated: ${urls.length}
+    Generation Time: ${generationTime}ms
+  -->
+${urls.join('')}
 </urlset>`;
 
-    // Google'a sitemap güncellemesini bildir
-    try {
-      const pingUrls = [
-        `https://www.google.com/ping?sitemap=${encodeURIComponent(SITE_URL + '/sitemap-jobs.xml')}`,
-        `https://www.bing.com/ping?sitemap=${encodeURIComponent(SITE_URL + '/sitemap-jobs.xml')}`
-      ];
-
-      // Ping işlemlerini paralel olarak yap
-      const pingPromises = pingUrls.map(async (url) => {
-        try {
-          const response = await fetch(url, { 
-            method: 'GET',
-            timeout: 5000 
-          });
-          console.log(`Pinged search engine: ${url} - Status: ${response.status}`);
-          return { url, success: true, status: response.status };
-        } catch (error) {
-          console.error(`Failed to ping: ${url}`, error);
-          return { url, success: false, error: error.message };
-        }
-      });
-
-      await Promise.allSettled(pingPromises);
-    } catch (pingError) {
-      console.error('Error pinging search engines:', pingError);
-    }
+    // PING İŞLEMİ KALDIRILDI - Sadece yeni ilan eklendiğinde Firebase trigger ile yapılmalı
+    // Netlify function her çağrıldığında ping atmak gereksiz ve spam olur
 
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=1800', // 30 dakika cache
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600', // 1 saat cache (30 dakikadan artırıldı)
         'X-Robots-Tag': 'noindex',
         'Access-Control-Allow-Origin': '*',
         'X-Total-Jobs': totalJobs.toString(),
         'X-Active-Jobs': activeJobs.toString(),
-        'X-Generated-At': new Date().toISOString()
+        'X-URLs-Generated': urls.length.toString(),
+        'X-Generation-Time': generationTime.toString(),
+        'X-Generated-At': now
       },
       body: sitemap
     };
 
   } catch (error) {
-    console.error('Sitemap generation error:', error);
+    console.error('💥 Sitemap generation error:', error);
 
     return {
       statusCode: 500,
       headers: {
-        'Content-Type': 'application/xml; charset=utf-8'
+        'Content-Type': 'application/xml; charset=utf-8',
+        'Cache-Control': 'no-cache'
       },
       body: `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Error generating sitemap: ${error.message} -->
-  <!-- Generated on ${new Date().toISOString()} -->
+  <!-- 
+    Error generating sitemap
+    Error: ${escapeXml(error.message)}
+    Generated: ${new Date().toISOString()}
+  -->
 </urlset>`
     };
   }
