@@ -2,8 +2,6 @@ const { ref, get } = require('firebase/database');
 const { initializeApp } = require('firebase/app');
 const { getDatabase } = require('firebase/database');
 
-// ÖNEMLİ: Bu bilgileri environment variable olarak kullanın!
-// Netlify dashboard > Site settings > Environment variables
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY || "AIzaSyAUmnb0K1M6-U8uzSsYVpTxAAdXdU8I--o",
   authDomain: process.env.FIREBASE_AUTH_DOMAIN || "btc3-d7d9b.firebaseapp.com",
@@ -38,13 +36,11 @@ function generateSlug(text) {
 function parseTimestamp(timestamp) {
   if (!timestamp) return new Date();
   
-  // Handle different timestamp formats
   if (typeof timestamp === 'number') {
     return new Date(timestamp);
   }
   
   if (typeof timestamp === 'object' && timestamp !== null) {
-    // Firebase ServerValue.TIMESTAMP or Firestore Timestamp
     if (timestamp.seconds) {
       return new Date(timestamp.seconds * 1000);
     }
@@ -53,7 +49,6 @@ function parseTimestamp(timestamp) {
     }
   }
   
-  // Fallback
   return new Date(timestamp);
 }
 
@@ -67,17 +62,16 @@ function escapeXml(text) {
     .replace(/'/g, '&apos;');
 }
 
-// Priority hesaplama - Yeni ilanlar daha yüksek öncelikli
 function calculatePriority(createdAt) {
   const now = Date.now();
   const daysSinceCreation = (now - createdAt) / (1000 * 60 * 60 * 24);
   
-  if (daysSinceCreation < 1) return '1.0';      // Bugünkü ilanlar
-  if (daysSinceCreation < 3) return '0.95';     // 3 günden yeni
-  if (daysSinceCreation < 7) return '0.9';      // Haftalık
-  if (daysSinceCreation < 14) return '0.85';    // 2 haftalık
-  if (daysSinceCreation < 30) return '0.8';     // Aylık
-  return '0.7';                                  // Eski ilanlar
+  if (daysSinceCreation < 1) return '1.0';
+  if (daysSinceCreation < 3) return '0.95';
+  if (daysSinceCreation < 7) return '0.9';
+  if (daysSinceCreation < 14) return '0.85';
+  if (daysSinceCreation < 30) return '0.8';
+  return '0.7';
 }
 
 exports.handler = async (event, context) => {
@@ -90,26 +84,25 @@ exports.handler = async (event, context) => {
     const snapshot = await get(jobsRef);
 
     const urls = [];
+    const slugMap = new Map(); // Duplicate slug kontrolü
     const SITE_URL = process.env.SITE_URL || 'https://isilanlarim.org';
     let totalJobs = 0;
     let activeJobs = 0;
     let errorCount = 0;
+    let duplicateCount = 0;
 
     if (snapshot.exists()) {
       const allJobs = [];
       
-      // Tüm ilanları topla
       snapshot.forEach((childSnapshot) => {
         const job = childSnapshot.val();
         const jobId = childSnapshot.key;
         
         totalJobs++;
         
-        // Sadece aktif ilanları işle
         if (job && job.status === 'active') {
           activeJobs++;
           
-          // Eksik alanları kontrol et ve varsayılan değerler ata
           const jobData = {
             id: jobId,
             title: job.title || 'İş İlanı',
@@ -127,14 +120,12 @@ exports.handler = async (event, context) => {
 
       console.log(`📊 Total jobs: ${totalJobs}, Active jobs: ${activeJobs}`);
 
-      // İlanları tarihe göre sırala (yeni olanlar önce)
       allJobs.sort((a, b) => {
         const timeA = a.updatedAt || a.createdAt || 0;
         const timeB = b.updatedAt || b.createdAt || 0;
         return timeB - timeA;
       });
 
-      // Her ilan için URL oluştur
       allJobs.forEach((job, index) => {
         try {
           const slug = generateSlug(job.title);
@@ -142,9 +133,19 @@ exports.handler = async (event, context) => {
           const lastmod = lastmodDate.toISOString();
           const priority = calculatePriority(job.createdAt);
 
-          // KRİTİK FİX: Job ID'yi URL'e ekledik!
-          // JobCard.tsx ile uyumlu URL formatı
-          const jobUrl = `${SITE_URL}/ilan/${job.id}/${slug}`;
+          // ⚠️ GEÇİCİ ÇÖZÜM: Mevcut frontend formatına uygun (ID'siz)
+          // URL formatı: /ilan/{slug}
+          const jobUrl = `${SITE_URL}/ilan/${slug}`;
+          
+          // ⚠️ UYARI: Duplicate slug kontrolü
+          if (slugMap.has(slug)) {
+            duplicateCount++;
+            console.warn(`⚠️ DUPLICATE SLUG: "${slug}" - Jobs: ${slugMap.get(slug)} ve ${job.id}`);
+            // Duplicate slug varsa sadece ilkini ekle
+            return;
+          }
+          
+          slugMap.set(slug, job.id);
           
           urls.push(`
     <url>
@@ -154,7 +155,6 @@ exports.handler = async (event, context) => {
       <priority>${priority}</priority>
     </url>`);
 
-          // İlk 5 ve son 5 ilanı logla
           if (index < 5 || index >= allJobs.length - 5) {
             console.log(`✅ Job ${index + 1}/${allJobs.length}: ${job.title} - Priority: ${priority}`);
           }
@@ -172,8 +172,11 @@ exports.handler = async (event, context) => {
     if (errorCount > 0) {
       console.warn(`⚠️ ${errorCount} errors occurred during generation`);
     }
+    if (duplicateCount > 0) {
+      console.warn(`⚠️⚠️⚠️ ${duplicateCount} DUPLICATE SLUGS FOUND! Bu ilanlar sitemap'te eksik!`);
+      console.warn(`⚠️ ÖNLEM: Frontend'e Job ID eklenmeli!`);
+    }
 
-    // Sitemap XML'ini oluştur
     const now = new Date().toISOString();
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -186,24 +189,26 @@ exports.handler = async (event, context) => {
     Total Jobs: ${totalJobs}
     Active Jobs: ${activeJobs}
     URLs Generated: ${urls.length}
+    Duplicate Slugs: ${duplicateCount}
     Generation Time: ${generationTime}ms
+    
+    ⚠️ UYARI: URL formatı ID içermiyor - duplicate slug riski var!
+    ⚠️ ÖNERİ: Frontend'i güncelleyip /ilan/{id}/{slug} formatına geçin
   -->
 ${urls.join('')}
 </urlset>`;
-
-    // PING İŞLEMİ KALDIRILDI - Sadece yeni ilan eklendiğinde Firebase trigger ile yapılmalı
-    // Netlify function her çağrıldığında ping atmak gereksiz ve spam olur
 
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600', // 1 saat cache (30 dakikadan artırıldı)
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
         'X-Robots-Tag': 'noindex',
         'Access-Control-Allow-Origin': '*',
         'X-Total-Jobs': totalJobs.toString(),
         'X-Active-Jobs': activeJobs.toString(),
         'X-URLs-Generated': urls.length.toString(),
+        'X-Duplicate-Slugs': duplicateCount.toString(),
         'X-Generation-Time': generationTime.toString(),
         'X-Generated-At': now
       },
