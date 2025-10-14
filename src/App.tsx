@@ -121,7 +121,7 @@ export function App() {
                 <Route path="/staj-ilanlari/sayfa/:pageNumber" element={<CategoryPage />} />
                 
                 {/* Job details with SEO-friendly URL */}
-                <Route path="/ilan/:slug" element={<JobDetailsPage />} />
+                <Route path="/ilan/:id/:slug" element={<JobDetailsPage />} />
                 
                 {/* Protected routes */}
                 <Route 
