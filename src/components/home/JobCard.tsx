@@ -52,19 +52,28 @@ export function JobCard({ job, onDeleted }: JobCardProps) {
   const isPremium = job.isPremium && job.premiumEndDate && job.premiumEndDate > Date.now();
   const premiumPackage = job.premiumPackage as 'daily' | 'weekly' | 'monthly' | undefined;
   
-  const handleJobClick = () => {
-    // Scroll pozisyonunu kaydet
+  // Job URL'ini oluştur
+  const jobUrl = generateJobUrl(job);
+  
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Eğer link veya buton tıklanmışsa, card click'i çalıştırma
+    const target = e.target as HTMLElement;
+    if (target.closest('a') || target.closest('button')) {
+      return;
+    }
+    
+    // Scroll pozisyonunu kaydet ve yönlendir
     sessionStorage.setItem('scrollPosition', window.scrollY.toString());
     sessionStorage.setItem(
       'previousPath',
       window.location.pathname + window.location.search
     );
-
-    navigate(generateJobUrl(job));
+    navigate(jobUrl);
   };
 
   const handleDeleteClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
 
     const confirmMessage = `"${job.title}" ilanını silmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz.`;
 
@@ -91,10 +100,10 @@ export function JobCard({ job, onDeleted }: JobCardProps) {
 
   return (
     <article 
-      className={`group cursor-pointer relative touch-manipulation bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-3 sm:p-5 ${
+      className={`group relative touch-manipulation bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-3 sm:p-5 ${
         isPremium ? 'ring-2 ring-purple-400' : ''
-      }`} 
-      onClick={handleJobClick}
+      }`}
+      onClick={handleCardClick}
       itemScope 
       itemType="https://schema.org/JobPosting"
     >
@@ -168,12 +177,24 @@ export function JobCard({ job, onDeleted }: JobCardProps) {
             </div>
           </div>
           
-          {/* Job Title - Mobilde 2 satıra kadar */}
-          <h2 
-            className="text-[15px] leading-snug sm:text-lg md:text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-2 cursor-pointer min-h-[2.5rem] sm:min-h-0"
-            itemProp="title"
-          >
-            {job.title}
+          {/* Job Title - Artık gerçek bir link */}
+          <h2 className="min-h-[2.5rem] sm:min-h-0">
+            <a
+              href={jobUrl}
+              onClick={(e) => {
+                e.preventDefault();
+                sessionStorage.setItem('scrollPosition', window.scrollY.toString());
+                sessionStorage.setItem(
+                  'previousPath',
+                  window.location.pathname + window.location.search
+                );
+                navigate(jobUrl);
+              }}
+              className="text-[15px] leading-snug sm:text-lg md:text-xl font-bold text-gray-900 hover:text-red-600 transition-colors line-clamp-2 cursor-pointer block"
+              itemProp="title"
+            >
+              {job.title}
+            </a>
           </h2>
           
           {/* Description Preview - Desktop */}
@@ -212,11 +233,17 @@ export function JobCard({ job, onDeleted }: JobCardProps) {
           <div className="flex items-center justify-between gap-2 pt-2 sm:pt-3 border-t border-gray-100">
             <div className="flex items-center gap-2">
               {/* Apply Button */}
-              <button className="px-3 sm:px-5 py-1.5 sm:py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white text-xs sm:text-sm font-bold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 whitespace-nowrap">
+              <button 
+                onClick={(e) => e.stopPropagation()}
+                className="px-3 sm:px-5 py-1.5 sm:py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white text-xs sm:text-sm font-bold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 whitespace-nowrap"
+              >
                 🚀 BAŞVUR
               </button>
               {/* Bookmark */}
-              <button className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
+              <button 
+                onClick={(e) => e.stopPropagation()}
+                className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+              >
                 <Bookmark className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               </button>
             </div>
