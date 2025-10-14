@@ -1,3 +1,5 @@
+// src/utils/seoUtils.ts - DÜZELTILMIŞ VERSIYONU
+
 // ✅ DÜZELTME 1: Sadece tarih formatı (YYYY-MM-DD) - Google'ın istediği format
 export function toISO8601Date(timestamp: number): string {
   if (!timestamp || isNaN(timestamp) || timestamp <= 0) {
@@ -40,9 +42,23 @@ export function generateSlug(text: string): string {
     .substring(0, 100);
 }
 
+// ✅ KRİTİK DÜZELTME: Job ID eklendi!
 export function generateJobUrl(job: any): string {
   const slug = generateSlug(job.title);
-  return `/ilan/${slug}`;
+  // ✅ YENI: Job ID eklendi - benzersiz URL garantisi
+  return `/ilan/${job.id}/${slug}`;
+}
+
+// ✅ BONUS: Eski URL'lerden ID çıkarma fonksiyonu
+export function extractJobIdFromUrl(pathname: string): string | null {
+  // Yeni format: /ilan/{id}/{slug}
+  const match = pathname.match(/^\/ilan\/([^\/]+)\/[^\/]+$/);
+  if (match) {
+    return match[1]; // Job ID'yi döndür
+  }
+  
+  // Eski format: /ilan/{slug} - ID yok
+  return null;
 }
 
 // ✅ DÜZELTME 3: Lokasyon parsing güçlendirildi
@@ -147,8 +163,8 @@ export function generateJobPostingJsonLd(job: any) {
     }
   };
 
-  // ✅ ÖNERİLEN: directApply (başvuru URL'si)
-  const jobUrl = `https://isilanlarim.org/ilan/${generateSlug(job.title)}`;
+  // ✅ ÖNERİLEN: directApply (başvuru URL'si) - YENİ FORMAT
+  const jobUrl = `https://isilanlarim.org${generateJobUrl(job)}`;
   jsonLd["url"] = jobUrl;
   jsonLd["directApply"] = true;
   jsonLd["applicationContact"] = {
