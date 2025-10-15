@@ -53,115 +53,48 @@
   to = "/index.html"
   status = 200
 
-# ✅ GÜVENLİK VE PERFORMANS HEADER'LARI (LIGHTHOUSE İÇİN KRİTİK)
-[[headers]]
-  for = "/*"
-  [headers.values]
-    # Güvenlik Headers
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    
-    # HSTS - HTTPS zorunlu kılar
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-    
-    # Cross-Origin-Opener-Policy (Lighthouse için gerekli)
-    Cross-Origin-Opener-Policy = "same-origin-allow-popups"
-    
-    # Cross-Origin-Embedder-Policy
-    Cross-Origin-Embedder-Policy = "unsafe-none"
-    
-    # ⚠️ CSP DEVRE DIŞI - Site çalışması için gerekli
-    # Content-Security-Policy kaldırıldı (Firebase + Vite ile uyumlu değil)
-    # Site çalıştıktan sonra yavaşça eklenebilir
-    
-    # Permissions Policy
-    Permissions-Policy = "accelerometer=(), ambient-light-sensor=(), autoplay=(self), battery=(), camera=(), display-capture=(), document-domain=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()"
-    
-    # SEO Headers
-    X-Robots-Tag = "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-    X-UA-Compatible = "IE=edge"
-    X-DNS-Prefetch-Control = "on"
-    Link = "</sitemap.xml>; rel=sitemap; type=application/xml"
-
-# XML Sitemaps için özel headers
+# Headers for XML files - CRITICAL for sitemap recognition
 [[headers]]
   for = "/sitemap*.xml"
   [headers.values]
     Content-Type = "application/xml; charset=utf-8"
-    Cache-Control = "public, max-age=3600, s-maxage=3600"
+    Cache-Control = "public, max-age=3600"
     X-Robots-Tag = "index, follow"
     Link = "</sitemap.xml>; rel=sitemap; type=application/xml"
     Access-Control-Allow-Origin = "*"
 
-# JavaScript dosyaları - Uzun süreli cache (Netlify otomatik sıkıştırır)
+# Headers for better SEO and performance
 [[headers]]
-  for = "/assets/js/*.js"
+  for = "/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Access-Control-Allow-Origin = "*"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-XSS-Protection = "1; mode=block"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    X-Robots-Tag = "index, follow, max-snippet:-1, max-image-preview:large"
+    X-UA-Compatible = "IE=edge"
+    X-DNS-Prefetch-Control = "on"
+    Link = "</sitemap.xml>; rel=sitemap; type=application/xml"
 
-# CSS dosyaları - Uzun süreli cache (Netlify otomatik sıkıştırır)
+# Cache static assets
 [[headers]]
-  for = "/assets/css/*.css"
+  for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Font dosyaları - Uzun süreli cache
-[[headers]]
-  for = "/assets/fonts/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Access-Control-Allow-Origin = "*"
-
-# Görseller - Uzun süreli cache
-[[headers]]
-  for = "/assets/images/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    
+# Cache images
 [[headers]]
   for = "*.jpg"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "*.jpeg"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=31536000"
 
 [[headers]]
   for = "*.png"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=31536000"
 
 [[headers]]
   for = "*.webp"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    
-[[headers]]
-  for = "*.svg"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Content-Type = "image/svg+xml"
-
-# HTML - Kısa cache
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-    
-# Service Worker - No cache
-[[headers]]
-  for = "/sw.js"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-
-# Manifest
-[[headers]]
-  for = "/manifest.json"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-    Content-Type = "application/manifest+json"
+    Cache-Control = "public, max-age=31536000"
