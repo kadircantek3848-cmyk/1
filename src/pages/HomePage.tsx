@@ -72,6 +72,7 @@ export function HomePage() {
       url: window.location.pathname
     });
 
+    // ✅ DÜZELTILMIŞ: ItemList Schema - JobPosting'ler düzgün formatta
     const jobListSchema = {
       "@context": "https://schema.org",
       "@type": "ItemList",
@@ -85,13 +86,56 @@ export function HomePage() {
         "item": {
           "@type": "JobPosting",
           "title": job.title,
-          "description": job.description.substring(0, 100) + "...",
+          "description": job.description.substring(0, 150) + "...",
+          
+          // ✅ datePosted eklendi
+          "datePosted": job.createdAt || new Date().toISOString().split('T')[0],
+          
+          // ✅ validThrough eklendi (30 gün sonra)
+          "validThrough": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          
+          // ✅ employmentType eklendi
+          "employmentType": job.type === "Tam Zamanlı" ? "FULL_TIME" : 
+                           job.type === "Yarı Zamanlı" ? "PART_TIME" : 
+                           job.type === "Stajyer" ? "INTERN" : "FULL_TIME",
+          
           "hiringOrganization": {
             "@type": "Organization",
-            "name": job.company || "İşveren"
+            "name": job.company || "İşveren",
+            "sameAs": "https://isilanlarim.org"
           },
-          "jobLocation": job.location,
-          "url": `https://isilanlarim.org${generateJobUrl(job)}`
+          
+          // ✅ jobLocation düzgün Place objesi
+          "jobLocation": {
+            "@type": "Place",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": job.location.split(',')[0]?.trim() || job.location,
+              "addressRegion": job.location.split(',')[1]?.trim() || job.location,
+              "addressCountry": "TR"
+            }
+          },
+          
+          // ✅ Maaş varsa ekle
+          ...(job.salary && {
+            "baseSalary": {
+              "@type": "MonetaryAmount",
+              "currency": "TRY",
+              "value": {
+                "@type": "QuantitativeValue",
+                "value": parseSalary(job.salary),
+                "unitText": "MONTH"
+              }
+            }
+          }),
+          
+          "url": `https://isilanlarim.org${generateJobUrl(job)}`,
+          
+          "identifier": {
+            "@type": "PropertyValue",
+            "name": "job-id",
+            "value": job.id
+          }
         }
       }))
     };
@@ -142,6 +186,20 @@ export function HomePage() {
       checkJobDates(jobs);
     }
   }, [pageNumber, location.state, jobs, filteredJobs]);
+
+  // ✅ YENİ: Maaş parse helper fonksiyonu
+  const parseSalary = (salary: string): number => {
+    const numbers = salary.match(/\d+/g);
+    if (!numbers || numbers.length === 0) return 0;
+    
+    if (numbers.length >= 2) {
+      const min = parseInt(numbers[0]);
+      const max = parseInt(numbers[1]);
+      return (min + max) / 2;
+    }
+    
+    return parseInt(numbers[0]);
+  };
 
   useEffect(() => {
     if (location.state?.restoreScroll) {
