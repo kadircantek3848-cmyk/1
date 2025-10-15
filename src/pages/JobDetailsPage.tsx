@@ -12,7 +12,6 @@ const jobCache = new Map<string, { job: JobListing; timestamp: number }>();
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export function JobDetailsPage() {
-  // ✅ DÜZELTME: Artık hem id hem slug alıyoruz
   const { id, slug } = useParams<{ id: string; slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,34 +19,27 @@ export function JobDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Check if we navigated here from the job list
   const isModalView = location.state?.modal;
-  
-  // Check if job data was passed from the listing page
   const passedJobData = location.state?.jobData as JobListing | undefined;
 
   useEffect(() => {
-    // Scroll to top only for full page view
     if (!isModalView) {
       window.scrollTo(0, 0);
     }
     
     const fetchJob = async () => {
       try {
-        // ✅ DÜZELTME: ID kontrolü
         if (!id || !slug) {
           setError('Geçersiz ilan URL\'si');
           setLoading(false);
           return;
         }
 
-        // 1. ÖNCE: Eğer job data router state'den geliyorsa onu kullan
         if (passedJobData && passedJobData.id === id) {
           setJob(passedJobData);
           updateMetaTags(passedJobData);
           setLoading(false);
           
-          // ✅ DÜZELTME: Cache key artık ID
           jobCache.set(id, {
             job: passedJobData,
             timestamp: Date.now()
@@ -55,10 +47,8 @@ export function JobDetailsPage() {
           return;
         }
 
-        // 2. CACHE KONTROL: Önce cache'den bak (ID ile)
         const cachedJob = getCachedJob(id);
         if (cachedJob) {
-          // ✅ Slug doğrulaması - Yanlış slug varsa doğru URL'e yönlendir
           const correctSlug = generateSlug(cachedJob.title);
           if (slug !== correctSlug) {
             console.log('🔄 Redirecting to correct slug:', correctSlug);
@@ -72,11 +62,9 @@ export function JobDetailsPage() {
           return;
         }
 
-        // 3. FIREBASE'DEN ÇEK: ID ile direkt erişim (ÇOK HIZLI! 🚀)
         const foundJob = await fetchJobFromFirebase(id);
         
         if (foundJob) {
-          // ✅ Slug doğrulaması
           const correctSlug = generateSlug(foundJob.title);
           if (slug !== correctSlug) {
             console.log('🔄 Redirecting to correct slug:', correctSlug);
@@ -87,7 +75,6 @@ export function JobDetailsPage() {
           setJob(foundJob);
           updateMetaTags(foundJob);
           
-          // ✅ DÜZELTME: Cache'e kaydet (ID ile)
           jobCache.set(id, {
             job: foundJob,
             timestamp: Date.now()
@@ -106,7 +93,6 @@ export function JobDetailsPage() {
     fetchJob();
   }, [id, slug, passedJobData, isModalView, navigate]);
 
-  // ✅ DÜZELTME: Cache artık ID bazlı
   const getCachedJob = (jobId: string): JobListing | null => {
     const cached = jobCache.get(jobId);
     if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
@@ -116,19 +102,16 @@ export function JobDetailsPage() {
     return null;
   };
 
-  // ✅ DÜZELTME: Firebase'den direkt ID ile fetch (ÇOK HIZLI!)
   const fetchJobFromFirebase = async (jobId: string): Promise<JobListing | null> => {
     console.log('🔥 Fetching job from Firebase (by ID):', jobId);
     
     try {
-      // ✅ Direkt ID ile erişim - En hızlı yöntem!
       const directJobRef = ref(db, `jobs/${jobId}`);
       const snapshot = await get(directJobRef);
       
       if (snapshot.exists()) {
         const jobData = snapshot.val();
         
-        // Status kontrolü - aktif ilanları kabul et
         if (jobData.status === 'active' || jobData.status === 'approved' || jobData.status === 'published' || !jobData.status) {
           console.log('✅ Job found:', jobData.title);
           return { id: jobId, ...jobData } as JobListing;
@@ -145,7 +128,7 @@ export function JobDetailsPage() {
     return null;
   };
 
-  // Meta tags güncelle
+  // ✅ DÜZELTILMIŞ: Meta tags + JobPosting Schema güncelle
   const updateMetaTags = (job: JobListing) => {
     generateMetaTags({
       title: `${job.title} - ${job.company}, ${job.location} İş İlanı | İsilanlarim.org`,
@@ -176,38 +159,131 @@ export function JobDetailsPage() {
       url: window.location.href,
       jobData: job
     });
+
+    // ✅ YENİ: JobPosting Schema'sını dinamik ekle
+    updateJobPostingSchema(job);
   };
 
-  // ✅ SCROLL POZİSYONU DÜZELTİLMİŞ handleClose
+  // ✅ YENİ FONKSİYON: Dinamik JobPosting Schema
+  const updateJobPostingSchema = (job: JobListing) => {
+    // Eski schema varsa sil
+    const existingSchema = document.getElementById('jobposting-schema');
+    if (existingSchema) {
+      existingSchema.remove();
+    }
+
+    // Yeni schema oluştur
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "title": job.title,
+      "description": job.description,
+      
+      // ✅ KRİTİK: datePosted - İlanın yayın tarihi
+      "datePosted": job.createdAt || new Date().toISOString().split('T')[0],
+      
+      // ✅ Son başvuru tarihi (30 gün sonra)
+      "validThrough": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      
+      // ✅ Çalışma tipi
+      "employmentType": job.type === "Tam Zamanlı" ? "FULL_TIME" : 
+                       job.type === "Yarı Zamanlı" ? "PART_TIME" : 
+                       job.type === "Stajyer" ? "INTERN" : "FULL_TIME",
+      
+      // ✅ Firma bilgisi
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": job.company,
+        "sameAs": "https://isilanlarim.org"
+      },
+      
+      // ✅ KRİTİK: Lokasyon detayı
+      "jobLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": job.location.split(',')[0].trim(), // İlçe
+          "addressRegion": job.location.split(',')[1]?.trim() || job.location, // Şehir
+          "addressCountry": "TR"
+        }
+      },
+      
+      // ✅ Maaş bilgisi (varsa)
+      ...(job.salary && {
+        "baseSalary": {
+          "@type": "MonetaryAmount",
+          "currency": "TRY",
+          "value": {
+            "@type": "QuantitativeValue",
+            "value": parseSalary(job.salary),
+            "unitText": "MONTH"
+          }
+        }
+      }),
+      
+      // ✅ İlan URL'si
+      "url": window.location.href,
+      
+      // ✅ ID
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "job-id",
+        "value": job.id
+      }
+    };
+
+    // Schema'yı head'e ekle
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'jobposting-schema';
+    script.textContent = JSON.stringify(schema, null, 2);
+    document.head.appendChild(script);
+    
+    console.log('✅ JobPosting Schema updated:', job.title);
+  };
+
+  // ✅ YENİ FONKSİYON: Maaş parse helper
+  const parseSalary = (salary: string): number => {
+    // Sayıları çıkar
+    const numbers = salary.match(/\d+/g);
+    if (!numbers || numbers.length === 0) return 0;
+    
+    // Eğer aralık varsa (örn: 15.000 - 20.000) ortalama al
+    if (numbers.length >= 2) {
+      const min = parseInt(numbers[0]);
+      const max = parseInt(numbers[1]);
+      return (min + max) / 2;
+    }
+    
+    // Tek sayı varsa onu kullan
+    return parseInt(numbers[0]);
+  };
+
   const handleClose = () => {
     const previousPath = sessionStorage.getItem('previousPath') || '/';
     const scrollPosition = sessionStorage.getItem('scrollPosition');
     
-    // Önce navigate et
     navigate(previousPath, { 
       replace: true,
       state: { 
-        restoreScroll: true // Bu flag HomePage'e scroll restore için sinyal verir
+        restoreScroll: true
       }
     });
     
-    // Navigate sonrası scroll pozisyonunu geri yükle
     if (scrollPosition) {
-      // requestAnimationFrame kullanarak DOM render olduktan sonra scroll yap
       requestAnimationFrame(() => {
         setTimeout(() => {
           const position = parseInt(scrollPosition, 10);
           window.scrollTo({
             top: position,
-            behavior: 'instant' // Anında scroll, smooth değil
+            behavior: 'instant'
           });
           console.log('📍 Scroll restored to:', position);
-        }, 50); // Küçük delay - DOM'un render olması için
+        }, 50);
       });
     }
   };
 
-  // Loading state'i daha hızlı göster
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
@@ -219,7 +295,6 @@ export function JobDetailsPage() {
     );
   }
 
-  // Error state
   if (error || !job) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
@@ -231,7 +306,6 @@ export function JobDetailsPage() {
           <p className="text-gray-600 mb-4">{error || 'Bu ilan artık mevcut değil'}</p>
           <button
             onClick={() => {
-              // Ana sayfaya dönerken scroll pozisyonunu temizle
               sessionStorage.removeItem('scrollPosition');
               sessionStorage.removeItem('previousPath');
               navigate('/');
@@ -245,7 +319,6 @@ export function JobDetailsPage() {
     );
   }
 
-  // Render modal or full page
   return isModalView ? (
     <JobDetailsModal job={job} onClose={handleClose} />
   ) : (
