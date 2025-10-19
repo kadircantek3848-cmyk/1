@@ -128,7 +128,7 @@ export function JobDetailsPage() {
     return null;
   };
 
-  // ✅ DÜZELTILMIŞ: Meta tags + JobPosting Schema güncelle
+  // ✅ Meta tags + JobPosting Schema güncelle
   const updateMetaTags = (job: JobListing) => {
     generateMetaTags({
       title: `${job.title} - ${job.company}, ${job.location} İş İlanı | İsilanlarim.org`,
@@ -160,11 +160,11 @@ export function JobDetailsPage() {
       jobData: job
     });
 
-    // ✅ YENİ: JobPosting Schema'sını dinamik ekle
+    // ✅ JobPosting Schema'sını ekle
     updateJobPostingSchema(job);
   };
 
-  // ✅ GOOGLE SCHEMA GEREKSİNİMLERİNE GÖRE TAMAMEN YENİDEN YAZILDI
+  // ✅ YENİDEN YAZILDI: Firebase'den gelen schema verisini kullanır
   const updateJobPostingSchema = (job: JobListing) => {
     // Eski schema varsa sil
     const existingSchema = document.getElementById('jobposting-schema');
@@ -172,175 +172,123 @@ export function JobDetailsPage() {
       existingSchema.remove();
     }
 
-    // ✅ TARİH FONKSİYONLARI
-    const formatDate = (timestamp: any): string => {
-      // Unix timestamp mı kontrolü
-      if (typeof timestamp === 'number') {
-        // 10 haneli (saniye) veya 13 haneli (milisaniye) timestamp kontrolü
-        const date = timestamp < 10000000000 
-          ? new Date(timestamp * 1000) // saniye -> milisaniye
-          : new Date(timestamp); // zaten milisaniye
-        return date.toISOString();
-      }
-      // String tarih ise direkt kullan veya ISO'ya çevir
-      if (typeof timestamp === 'string') {
+    // ✅ FİREBASE'DEN GELEN SCHEMA VERİSİNİ KULLAN
+    // Eğer job.schema yoksa (eski ilanlar), fallback değerler kullan
+    const schema = job.schema || {};
+    
+    // Fallback fonksiyonlar (eski ilanlar için)
+    const getFallbackDatePosted = (): string => {
+      if (job.createdAt) {
+        const timestamp = typeof job.createdAt === 'number' 
+          ? (job.createdAt < 10000000000 ? job.createdAt * 1000 : job.createdAt)
+          : Date.now();
         return new Date(timestamp).toISOString();
       }
-      // Hiçbiri değilse bugünün tarihi
       return new Date().toISOString();
     };
 
-    // ✅ VALİDTHROUGH TARİHİ (İlan tipine göre)
-    const getValidThrough = (): string => {
+    const getFallbackValidThrough = (): string => {
       const now = new Date();
-      let daysToAdd = 30; // Default 30 gün
-      
-      // İlan tipine göre süre belirle
-      if (job.type === 'Stajyer') {
-        daysToAdd = 90; // Staj ilanları daha uzun süre açık kalır
-      } else if (job.type === 'Sezonluk') {
-        daysToAdd = 60; // Sezonluk işler
-      } else if (job.urgency === 'urgent' || job.title.toLowerCase().includes('acil')) {
-        daysToAdd = 14; // Acil ilanlar
-      }
-      
-      now.setDate(now.getDate() + daysToAdd);
+      now.setDate(now.getDate() + 90); // 90 gün sonrası
       return now.toISOString();
     };
 
-    // ✅ İSTİHDAM TİPİ MAPPİNG (Google'ın kabul ettiği değerler)
-    const getEmploymentType = (): string | string[] => {
-      const typeMap: { [key: string]: string | string[] } = {
+    const getFallbackEmploymentType = (): string => {
+      const typeMap: Record<string, string> = {
         'Tam Zamanlı': 'FULL_TIME',
         'Yarı Zamanlı': 'PART_TIME',
+        'Freelance': 'CONTRACTOR',
+        'Staj': 'INTERN',
         'Stajyer': 'INTERN',
-        'Sözleşmeli': 'CONTRACTOR',
         'Geçici': 'TEMPORARY',
         'Sezonluk': 'TEMPORARY',
-        'Freelance': 'CONTRACTOR',
-        'Gönüllü': 'VOLUNTEER',
-        'Diğer': 'OTHER'
+        'Sözleşmeli': 'CONTRACTOR'
       };
-      
-      // Birden fazla tip olabilir
-      if (job.type?.includes(',')) {
-        return job.type.split(',').map(t => typeMap[t.trim()] || 'OTHER');
-      }
-      
       return typeMap[job.type] || 'FULL_TIME';
     };
 
-    // ✅ LOKASYON PARSE (İlçe, Şehir, Posta Kodu)
-    const parseLocation = () => {
+    const getFallbackAddress = () => {
       const parts = job.location.split(',').map(p => p.trim());
-      let locality = parts[0] || job.location;
-      let region = parts[1] || parts[0] || job.location;
-      
-      // Türkiye'nin büyük şehirleri için posta kodu mapping (örnek)
-      const postalCodes: { [key: string]: string } = {
-        'İstanbul': '34000',
-        'Ankara': '06000',
-        'İzmir': '35000',
-        'Bursa': '16000',
-        'Antalya': '07000',
-        'Konya': '42000',
-        'Adana': '01000',
-        'Gaziantep': '27000',
-        'Şanlıurfa': '63000',
-        'Kocaeli': '41000',
-        'Mersin': '33000',
-        'Diyarbakır': '21000',
-        'Hatay': '31000',
-        'Manisa': '45000',
-        'Kayseri': '38000',
-        'Samsun': '55000',
-        'Balıkesir': '10000',
-        'Kahramanmaraş': '46000',
-        'Van': '65000',
-        'Aydın': '09000',
-        'Denizli': '20000',
-        'Sakarya': '54000',
-        'Tekirdağ': '59000',
-        'Muğla': '48000',
-        'Mardin': '47000',
-        'Malatya': '44000'
+      return {
+        streetAddress: parts.length > 1 ? parts.slice(1).join(', ') : '',
+        addressLocality: parts[0] || job.location,
+        addressRegion: parts[0] || job.location,
+        postalCode: '34000',
+        addressCountry: 'TR'
       };
-      
-      const postalCode = postalCodes[region] || postalCodes[locality] || '34000';
-      
-      return { locality, region, postalCode };
     };
 
-    const locationData = parseLocation();
+    // ✅ MAAŞ PARSE (Schema'dan veya fallback)
+    const getSalarySchema = () => {
+      // Önce Firebase schema'sından al
+      if (schema.salaryValue && schema.salaryValue > 0) {
+        return {
+          "@type": "MonetaryAmount",
+          "currency": schema.salaryCurrency || "TRY",
+          "value": {
+            "@type": "QuantitativeValue",
+            "value": schema.salaryValue,
+            "unitText": schema.salaryUnit || "MONTH"
+          }
+        };
+      }
 
-    // ✅ MAAŞ PARSE (Daha akıllı)
-    const parseSalarySchema = () => {
-      if (!job.salary || job.salary === 'Belirtilmemiş') return null;
-      
+      // Fallback: job.salary string'inden parse et
+      if (!job.salary || job.salary === 'Belirtilmemiş' || job.salary === '0') {
+        return null;
+      }
+
       const salaryStr = job.salary.replace(/\./g, '').replace(/,/g, '');
       const numbers = salaryStr.match(/\d+/g);
       
       if (!numbers || numbers.length === 0) return null;
-      
-      // Aralık varsa (min-max)
+
+      // Aralık varsa
       if (numbers.length >= 2) {
-        const min = parseInt(numbers[0]);
-        const max = parseInt(numbers[1]);
-        
         return {
           "@type": "MonetaryAmount",
           "currency": "TRY",
           "value": {
             "@type": "QuantitativeValue",
-            "minValue": min,
-            "maxValue": max,
+            "minValue": parseInt(numbers[0]),
+            "maxValue": parseInt(numbers[1]),
             "unitText": "MONTH"
           }
         };
       }
-      
+
       // Tek değer
-      const value = parseInt(numbers[0]);
-      
-      // "Asgari ücret" kontrolü
-      if (salaryStr.toLowerCase().includes('asgari')) {
-        return {
-          "@type": "MonetaryAmount",
-          "currency": "TRY",
-          "value": {
-            "@type": "QuantitativeValue",
-            "value": 17002, // 2024 asgari ücret
-            "unitText": "MONTH"
-          }
-        };
-      }
-      
       return {
         "@type": "MonetaryAmount",
         "currency": "TRY",
         "value": {
           "@type": "QuantitativeValue",
-          "value": value,
+          "value": parseInt(numbers[0]),
           "unitText": "MONTH"
         }
       };
     };
 
-    // ✅ SCHEMA OLUŞTUR (Google'ın tüm gereksinimlerini karşılayan)
-    const schema = {
+    // ✅ ADRES BİLGİSİ (Schema'dan veya fallback)
+    const addressDetail = schema.addressDetail || getFallbackAddress();
+
+    // ✅ GOOGLE SCHEMA OLUŞTUR
+    const jobPostingSchema = {
       "@context": "https://schema.org",
       "@type": "JobPosting",
+      
+      // Temel bilgiler
       "title": job.title,
       "description": job.description,
       
-      // ✅ KRİTİK: Tarihler ISO 8601 formatında
-      "datePosted": formatDate(job.createdAt),
-      "validThrough": getValidThrough(),
+      // ✅ KRİTİK: Tarihler (Firebase schema'dan veya fallback)
+      "datePosted": schema.datePosted || getFallbackDatePosted(),
+      "validThrough": schema.validThrough || getFallbackValidThrough(),
       
-      // ✅ İstihdam tipi
-      "employmentType": getEmploymentType(),
+      // ✅ İstihdam tipi (Firebase schema'dan veya fallback)
+      "employmentType": schema.employmentType || getFallbackEmploymentType(),
       
-      // ✅ İşveren organizasyon
+      // ✅ İşveren
       "hiringOrganization": {
         "@type": "Organization",
         "name": job.company,
@@ -348,36 +296,43 @@ export function JobDetailsPage() {
         ...(job.companyLogo && { "logo": job.companyLogo })
       },
       
-      // ✅ DETAYLI LOKASYON (postalCode ve streetAddress dahil)
+      // ✅ DETAYLI LOKASYON (Firebase schema'dan veya fallback)
       "jobLocation": {
         "@type": "Place",
         "address": {
           "@type": "PostalAddress",
-          "addressLocality": locationData.locality,
-          "addressRegion": locationData.region,
-          "postalCode": locationData.postalCode,
-          "addressCountry": "TR",
-          // İsteğe bağlı: Genel bir adres ekleyebiliriz
-          "streetAddress": `${locationData.locality}, ${locationData.region}`
+          "streetAddress": addressDetail.streetAddress,
+          "addressLocality": addressDetail.addressLocality,
+          "addressRegion": addressDetail.addressRegion,
+          "postalCode": addressDetail.postalCode,
+          "addressCountry": addressDetail.addressCountry
         }
       },
       
-      // ✅ Maaş bilgisi (varsa ve geçerliyse)
-      ...(parseSalarySchema() && {
-        "baseSalary": parseSalarySchema()
+      // ✅ Maaş (varsa)
+      ...(getSalarySchema() && {
+        "baseSalary": getSalarySchema()
       }),
       
-      // ✅ Başvuru talimatları (varsa)
+      // İlan URL'si
+      "url": window.location.href,
+      
+      // Benzersiz ID
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "job-id",
+        "value": job.id
+      },
+      
+      // Opsiyonel alanlar
       ...(job.applicationInstructions && {
         "applicationInstructions": job.applicationInstructions
       }),
       
-      // ✅ Çalışma saatleri (varsa)
       ...(job.workHours && {
         "workHours": job.workHours
       }),
       
-      // ✅ Eğitim gereksinimleri (varsa)
       ...(job.educationRequirements && {
         "educationRequirements": {
           "@type": "EducationalOccupationalCredential",
@@ -385,7 +340,6 @@ export function JobDetailsPage() {
         }
       }),
       
-      // ✅ Deneyim gereksinimleri (varsa)
       ...(job.experienceRequirements && {
         "experienceRequirements": {
           "@type": "OccupationalExperienceRequirements",
@@ -393,42 +347,26 @@ export function JobDetailsPage() {
         }
       }),
       
-      // ✅ Uzaktan çalışma (varsa)
       ...(job.remote && {
         "jobLocationType": "TELECOMMUTE"
       }),
       
-      // ✅ Nitelikler/Beceriler (varsa)
       ...(job.skills && {
         "skills": job.skills
       }),
       
-      // ✅ Sorumluluklar (varsa)
       ...(job.responsibilities && {
         "responsibilities": job.responsibilities
       }),
       
-      // ✅ İlan URL'si
-      "url": window.location.href,
-      
-      // ✅ Benzersiz tanımlayıcı
-      "identifier": {
-        "@type": "PropertyValue",
-        "name": "job-id",
-        "value": job.id
-      },
-      
-      // ✅ Yan haklar (varsa)
       ...(job.benefits && {
         "jobBenefits": job.benefits
       }),
       
-      // ✅ Endüstri (varsa)
       ...(job.industry && {
         "industry": job.industry
       }),
       
-      // ✅ Meslek kategorisi
       ...(job.category && {
         "occupationalCategory": job.category
       })
@@ -438,32 +376,18 @@ export function JobDetailsPage() {
     const script = document.createElement('script');
     script.type = 'application/ld+json';
     script.id = 'jobposting-schema';
-    script.textContent = JSON.stringify(schema, null, 2);
+    script.textContent = JSON.stringify(jobPostingSchema, null, 2);
     document.head.appendChild(script);
     
-    console.log('✅ Enhanced JobPosting Schema added:', {
+    console.log('✅ JobPosting Schema added:', {
       title: job.title,
-      datePosted: schema.datePosted,
-      validThrough: schema.validThrough,
-      location: locationData
+      datePosted: jobPostingSchema.datePosted,
+      validThrough: jobPostingSchema.validThrough,
+      employmentType: jobPostingSchema.employmentType,
+      location: addressDetail.addressLocality,
+      hasSchema: !!job.schema,
+      hasSalary: !!getSalarySchema()
     });
-  };
-
-  // ✅ YENİ FONKSİYON: Maaş parse helper
-  const parseSalary = (salary: string): number => {
-    // Sayıları çıkar
-    const numbers = salary.match(/\d+/g);
-    if (!numbers || numbers.length === 0) return 0;
-    
-    // Eğer aralık varsa (örn: 15.000 - 20.000) ortalama al
-    if (numbers.length >= 2) {
-      const min = parseInt(numbers[0]);
-      const max = parseInt(numbers[1]);
-      return (min + max) / 2;
-    }
-    
-    // Tek sayı varsa onu kullan
-    return parseInt(numbers[0]);
   };
 
   const handleClose = () => {
