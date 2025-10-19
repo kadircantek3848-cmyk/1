@@ -1,2 +1,9 @@
+# Sitemap fonksiyonu
 /sitemap-jobs.xml    /.netlify/functions/sitemap-jobs    200
-/* /index.html 200
+
+# İlan sayfaları - SPA router'ına yönlendir
+# Firebase'de yoksa 404 gösterecek (JobDetailsPage.tsx halleder)
+/ilan/*  /index.html  200
+
+# Diğer tüm rotalar SPA için
+/*  /index.html  200
