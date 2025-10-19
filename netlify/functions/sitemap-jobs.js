@@ -90,6 +90,7 @@ exports.handler = async (event, context) => {
     let activeJobs = 0;
     let errorCount = 0;
     let duplicateCount = 0;
+    let skippedJobs = 0; // ✅ YENİ: Atlanan ilan sayısı
 
     if (snapshot.exists()) {
       const allJobs = [];
@@ -100,7 +101,26 @@ exports.handler = async (event, context) => {
         
         totalJobs++;
         
+        // ✅ İYİLEŞTİRME: Sadece 'active' ilanları ekle
+        // Silinen, süresi dolmuş veya pasif ilanlar otomatik atlanır
         if (job && job.status === 'active') {
+          // ✅ YENİ: İlan başlığı ve açıklama kontrolü
+          if (!job.title || job.title.trim() === '') {
+            skippedJobs++;
+            console.warn(`⚠️ SKIPPED: Job ${jobId} - No title`);
+            return;
+          }
+          
+          // ✅ YENİ: 90 günden eski ilanları atlayabiliriz (opsiyonel)
+          const createdAt = job.createdAt || Date.now();
+          const daysSinceCreation = (Date.now() - createdAt) / (1000 * 60 * 60 * 24);
+          
+          if (daysSinceCreation > 90) {
+            skippedJobs++;
+            console.warn(`⚠️ SKIPPED: Job ${jobId} - Too old (${Math.floor(daysSinceCreation)} days)`);
+            return;
+          }
+          
           activeJobs++;
           
           const jobData = {
@@ -115,11 +135,16 @@ exports.handler = async (event, context) => {
           };
           
           allJobs.push(jobData);
+        } else {
+          // Silinen/pasif ilanlar
+          skippedJobs++;
+          console.log(`🗑️ SKIPPED: Job ${jobId} - Status: ${job?.status || 'undefined'}`);
         }
       });
 
-      console.log(`📊 Total jobs: ${totalJobs}, Active jobs: ${activeJobs}`);
+      console.log(`📊 Total: ${totalJobs} | Active: ${activeJobs} | Skipped: ${skippedJobs}`);
 
+      // ✅ En yeni ilanlar önce
       allJobs.sort((a, b) => {
         const timeA = a.updatedAt || a.createdAt || 0;
         const timeB = b.updatedAt || b.createdAt || 0;
@@ -133,16 +158,16 @@ exports.handler = async (event, context) => {
           const lastmod = lastmodDate.toISOString();
           const priority = calculatePriority(job.createdAt);
 
-          // ⚠️ GEÇİCİ ÇÖZÜM: Mevcut frontend formatına uygun (ID'siz)
-          // URL formatı: /ilan/{slug}
-          const jobUrl = `${SITE_URL}/ilan/${slug}`;
+          // ✅ YENİ: ID dahil URL formatı (duplicate slug sorunu çözüldü)
+          // Eski format: /ilan/{slug}
+          // Yeni format: /ilan/{id}/{slug}
+          const jobUrl = `${SITE_URL}/ilan/${job.id}/${slug}`;
           
-          // ⚠️ UYARI: Duplicate slug kontrolü
+          // ✅ Duplicate slug kontrolü artık ID ile çözüldü, ama yine de log tut
           if (slugMap.has(slug)) {
             duplicateCount++;
             console.warn(`⚠️ DUPLICATE SLUG: "${slug}" - Jobs: ${slugMap.get(slug)} ve ${job.id}`);
-            // Duplicate slug varsa sadece ilkini ekle
-            return;
+            // Artık ID var, her ikisini de ekleyebiliriz
           }
           
           slugMap.set(slug, job.id);
@@ -173,8 +198,7 @@ exports.handler = async (event, context) => {
       console.warn(`⚠️ ${errorCount} errors occurred during generation`);
     }
     if (duplicateCount > 0) {
-      console.warn(`⚠️⚠️⚠️ ${duplicateCount} DUPLICATE SLUGS FOUND! Bu ilanlar sitemap'te eksik!`);
-      console.warn(`⚠️ ÖNLEM: Frontend'e Job ID eklenmeli!`);
+      console.warn(`⚠️ ${duplicateCount} duplicate slugs found (resolved by ID)`);
     }
 
     const now = new Date().toISOString();
@@ -188,12 +212,14 @@ exports.handler = async (event, context) => {
     Generated: ${now}
     Total Jobs: ${totalJobs}
     Active Jobs: ${activeJobs}
+    Skipped Jobs: ${skippedJobs}
     URLs Generated: ${urls.length}
     Duplicate Slugs: ${duplicateCount}
     Generation Time: ${generationTime}ms
     
-    ⚠️ UYARI: URL formatı ID içermiyor - duplicate slug riski var!
-    ⚠️ ÖNERİ: Frontend'i güncelleyip /ilan/{id}/{slug} formatına geçin
+    ✅ GÜNCELLEME: URL formatı artık ID içeriyor - /ilan/{id}/{slug}
+    ✅ OTOMATİK TEMİZLEME: Sadece aktif ilanlar eklenir
+    ✅ 90+ günlük eski ilanlar otomatik atlanır
   -->
 ${urls.join('')}
 </urlset>`;
@@ -207,6 +233,7 @@ ${urls.join('')}
         'Access-Control-Allow-Origin': '*',
         'X-Total-Jobs': totalJobs.toString(),
         'X-Active-Jobs': activeJobs.toString(),
+        'X-Skipped-Jobs': skippedJobs.toString(),
         'X-URLs-Generated': urls.length.toString(),
         'X-Duplicate-Slugs': duplicateCount.toString(),
         'X-Generation-Time': generationTime.toString(),
